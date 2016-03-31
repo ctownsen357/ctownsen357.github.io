@@ -16939,18 +16939,18 @@ module.exports = Array.isArray || function (arr) {
     });
 
     page('/', function() {
-      app.route = 'home';
+      app.route = 'about';
     });
 
     page(app.baseUrl, function() {
-      app.route = 'home';
+      app.route = 'about';
     });
 
-    page('/users', function() {
-      app.route = 'users';
+    page('/projects', function() {
+      app.route = 'projects';
     });
 
-    page('/users/:name', function(data) {
+    page('/projects/:name', function(data) {
       app.route = 'user-info';
       app.params = data.params;
     });
@@ -17229,6 +17229,12 @@ module.exports = Array.isArray || function (arr) {
           font-size: 24px!important;
         }
       }
+
+      .header-icon{
+        --iron-icon-height: 76px;
+        --iron-icon-width: 76px;
+      }
+
     </style>
   </template>
 </dom-module>
@@ -17246,9 +17252,9 @@ module.exports = Array.isArray || function (arr) {
     </style>
 
     <h2 class="page-title">{{greeting}}</h2>
-    <span>Update text to change the greeting.</span>
+    <span>You've found my Github page - woot.</span>
     
-    <input value="{{greeting::input}}">
+    
   </template>
 
   <script>
@@ -17304,12 +17310,9 @@ module.exports = Array.isArray || function (arr) {
 
         ready: function() {
           this.items = [
-            'Responsive Web App boilerplate',
-            'Iron Elements and Paper Elements',
-            'End-to-end Build Tooling (including Vulcanize)',
-            'Unit testing with Web Component Tester',
-            'Routing with Page.js',
-            'Offline support with the Platinum Service Worker Elements'
+            'This landing page and general info about me - yay',
+            'Write ups on some of the projects I have worked on and found most interesting',
+            'A way to contact me',
           ];
         }
       });
