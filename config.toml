@@ -1,4 +1,4 @@
-baseurl = "http://ctownsen357.github.io"
+baseurl = "http://ctownsen357.github.io/"
 languageCode = "en-gb"
 title = "ctownsen357@github.io"
 theme = "hpstr"
@@ -16,5 +16,5 @@ disqusShortname = "hpstrhugo"
 		github = "ctownsen357"
 	[params.image]
 	  feature = "/images/abstract-1.jpg"
-	  credit = "dargadgetz"
+	  credit = "ctownsend"
 	  creditlink = "http://www.dargadgetz.com/ios-7-abstract-wallpaper-pack-for-iphone-5-and-ipod-touch-retina/"
