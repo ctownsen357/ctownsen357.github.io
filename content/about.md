@@ -14,3 +14,4 @@ I have also developed many REST based APIs and web applications on both Linux an
 Most recently I have been doing a lot of DevOps style work in the field of automation, deployment, and clustering out on AWS and private cloud infrastructure with Docker, Swarm, CoreOS, and RancherOS.
 
 Have a great day!
+
