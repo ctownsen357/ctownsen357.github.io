@@ -1,6 +1,6 @@
 baseurl = "http://ctownsen357.github.io"
 languageCode = "en-gb"
-title = "Chris Townsend"
+title = "ctownsen357@github.io"
 theme = "hpstr"
 pluralizelisttitles = false
 PygmentsCodeFences = true

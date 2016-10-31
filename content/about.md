@@ -1,29 +1,16 @@
 ---
-title: About this theme
+title: About this site
 comments: false
 weight: -1
 type: post
 ---
-This is a port of the **HPSTR** theme to [Hugo](https://gohugo.io). All the original features are intact and described below. Credit for the theme goes entirely to [Michael Rose](http://github.com/mmistakes).
-
+This site consists of a collection of posts about things I've learned.
 ---
-They say three times the charm, so here is another free responsive Jekyll blog theme for you. I've learned a ton since open sourcing my first two themes [on Github](http://github.com/mmistakes), and wanted to try a few new things this time around.
+### About Me
+I am a Senior Software Engineer at Applied Research Associates, Inc. in Raleigh, NC.  I work on a variety of distributed computing projects utilizing Apache Spark and other compute platforms / frameworks. I have a great deal of experience with very large databases (SQL Server and Postgresql) as well as setting up and running applications out on Amazon's AWS utilizing their EC2 compute resources.
 
-If you've used any of [my other themes](http://mademistakes.com/work/jekyll-themes/) most of this should be familiar territory...
+I have also developed many REST based APIs and web applications on both Linux and Windows platforms.
 
-## HPSTR Features:
+Most recently I have been doing a lot of DevOps style work in the field of automation, deployment, and clustering out on AWS and private cloud infrastructure with Docker, Swarm, CoreOS, and RancherOS.
 
-* Responsive templates for post, page, and post index `layouts`. Looks great on mobile, tablet, and desktop devices.
-* Gracefully degrades in older browsers. Compatible with Internet Explorer 8+ and all modern browsers.  
-* Sweet animated menu.
-* Background image support.
-* Support for large images to call out your favorite posts.
-* Optional [Disqus](http://disqus.com) comments.
-* Simple and clear permalink structure[^1].
-* [Open Graph](https://developers.facebook.com/docs/opengraph/) and [Twitter Cards](https://dev.twitter.com/docs/cards) support for a better social sharing experience.
-* [Custom 404 page](/404.html) to get you started.
-* [Syntax highlighting]({{< relref "posts/code-highlighting-post.md" >}}) stylesheets to make your code examples look snazzy.
-
-<div markdown="0"><a href="{{< relref "theme-setup.md" >}}" class="btn btn-info">Theme Setup</a> <a href="https://github.com/dldx/hpstr-hugo-theme" class="btn btn-success">Download HPSTR</a></div>
-
-[^1]: Example: *domain.com/category-name/post-title*
+Have a great day!
