@@ -11,7 +11,7 @@ disqusShortname = "hpstrhugo"
 	subtitle = "Things I've learned."
 	[params.author]
 		name = "Chris Townsend"
-		avatar = "/images/avatar.jpg"
+		avatar = "/images/profile.jpg"
 		bio = "Software engineer, always learning and improving my craft."
 		github = "ctownsen357"
 	[params.image]
