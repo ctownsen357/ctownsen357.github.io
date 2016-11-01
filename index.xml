@@ -9,7 +9,7 @@
     <atom:link href="http://ctownsen357.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>About this site</title>
+      <title>About</title>
       <link>http://ctownsen357.github.io/about/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
@@ -20,7 +20,7 @@
 
 &lt;p&gt;This site consists of short posts about things I&amp;rsquo;ve learned and find useful.&lt;/p&gt;
 
-&lt;h3 id=&#34;about-me&#34;&gt;About Me&lt;/h3&gt;
+&lt;h3 id=&#34;me&#34;&gt;Me&lt;/h3&gt;
 
 &lt;p&gt;I am a Senior Software Engineer at Applied Research Associates, Inc. in Raleigh, NC.  I work on a variety of distributed computing projects utilizing Apache Spark and other compute platforms / frameworks. I have a great deal of experience with very large databases (SQL Server and Postgresql) as well as setting up and running applications out on Amazon&amp;rsquo;s AWS utilizing their EC2 compute resources.&lt;/p&gt;
 
