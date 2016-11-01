@@ -125,7 +125,9 @@
       </div>
     </header>
     <div class="entry-content">
-      <p>You know it before you even try.  You try anyway.  Something like trying to bzip2 316,387 CSV files representing ~ 10TB of data.  You know it will be at least <sup>1</sup>&frasl;<sub>10</sub> the size and R can handle the bzip2 files directly so you call bzip2 and get the argument list too long error.  Find and xargs to the rescue!  Also, lbzip2 because you really don&rsquo;t want to wait on bzip2 any more than you have to.</p>
+      <p>You know it before you even try.  You try anyway.  Something like trying to bzip2  316,387 CSV files representing ~ 10TB of data.  You know it will be at least <sup>1</sup>&frasl;<sub>10</sub> the size and R can handle the bzip2 files directly so you call bzip2 and get the argument list too long error.</p>
+
+<p>Find and xargs to the rescue!  Also, lbzip2 because you really don&rsquo;t want to wait on bzip2 any more than you have to.</p>
 <div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>find path_to_files/ -name <span style="color: #e6db74">&quot;*.csv&quot;</span> <span style="color: #f8f8f2">|</span> xargs -P <span style="color: #ae81ff">5</span> lbzip2
 </pre></div>
 

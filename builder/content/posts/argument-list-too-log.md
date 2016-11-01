@@ -18,7 +18,9 @@ Tags = [
 
 +++
 
-You know it before you even try.  You try anyway.  Something like trying to bzip2 316,387 CSV files representing ~ 10TB of data.  You know it will be at least 1/10 the size and R can handle the bzip2 files directly so you call bzip2 and get the argument list too long error.  Find and xargs to the rescue!  Also, lbzip2 because you really don't want to wait on bzip2 any more than you have to.
+You know it before you even try.  You try anyway.  Something like trying to bzip2  316,387 CSV files representing ~ 10TB of data.  You know it will be at least 1/10 the size and R can handle the bzip2 files directly so you call bzip2 and get the argument list too long error.  
+
+Find and xargs to the rescue!  Also, lbzip2 because you really don't want to wait on bzip2 any more than you have to.
 
 ```{bash}
 
