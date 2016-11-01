@@ -2,7 +2,7 @@ name = "Hpstr"
 license = "MIT"
 licenselink = "https://github.com/dldx/hpstr-hugo-theme/blob/master/LICENSE.md"
 description = "A Hugo port of the HPSTR theme by Michael Rose (mmistakes)"
-homepage = "https://ctownsen357.github.io/"
+homepage = "https://ctownsen357.github.io/public/"
 tags = ["responsive", "blog"]
 features = ["comments", "scss", "menu"]
 
@@ -13,5 +13,5 @@ features = ["comments", "scss", "menu"]
 # If porting an existing theme
 [original]
   name = "ctownsen357@gmail.com"
-  homepage = "http://ctownsen357.github.io/"
+  homepage = "http://ctownsen357.github.io/public/"
   repo = "https://github.com/ctownsen357"
