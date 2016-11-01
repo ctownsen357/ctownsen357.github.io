@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ctownsen357@github.io</title>
+    <link>http://ctownsen357.github.io/categories/coreos/index.xml</link>
+    <description>Recent content on ctownsen357@github.io</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-gb</language>
+    <atom:link href="http://ctownsen357.github.io/categories/coreos/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>CoreOS Mount NTFS Share</title>
+      <link>http://ctownsen357.github.io/posts/coreos-mount-ntfs-share/</link>
+      <pubDate>Tue, 01 Nov 2016 14:12:12 -0400</pubDate>
+      
+      <guid>http://ctownsen357.github.io/posts/coreos-mount-ntfs-share/</guid>
+      <description>&lt;p&gt;I had the need to mount an NTFS share for an application that was connecting to a SQL Server database and required that a share be mapped.  While testing from my CentOS 7 desktop, creating the share was trivial.  Not so much once I transitioned over to a CoreOS machine where I was to deploy for user testing.   This is how I got around that problem:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;docker run -t -i -v /tmp:/host_tmp fedora /bin/bash
+yum groupinstall -y &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Development Tools&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Development Libraries&amp;quot;&lt;/span&gt;
+yum install -y tar bzip2
+
+curl https://download.samba.org/pub/linux-cifs/cifs-utils/cifs-utils-6.3.tar.bz2 &lt;span style=&#34;color: #f8f8f2&#34;&gt;|&lt;/span&gt; bunzip2 -c - &lt;span style=&#34;color: #f8f8f2&#34;&gt;|&lt;/span&gt; tar -xvf -
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;cd&lt;/span&gt; cifs-utils-6.3/
+./configure &lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; make
+cp mount.cifs /host_tmp/
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;exit&lt;/span&gt;
+
+sudo mkdir /media/foo
+sudo /tmp/mount.cifs &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;//1.1.1.1/ntfs_share&amp;quot;&lt;/span&gt; -o &lt;span style=&#34;color: #f8f8f2&#34;&gt;username&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;winuser,domain&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;mydomain.com,rw,dir_mode&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;0775,noperm /media/foo/ 
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Originally &lt;a href=&#34;https://gist.github.com/pantelis/540a19262cacc841fb0a&#34;&gt;found here&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

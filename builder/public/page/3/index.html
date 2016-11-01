@@ -37,7 +37,7 @@
     <meta property="og:image" content="http://ctownsen357.github.io/images/simmons-map.jpg" />
 
 
-  <meta property="og:updated_time" content="2012-05-22T00:00:00&#43;00:00"/>
+  <meta property="og:updated_time" content="2013-05-22T00:00:00&#43;00:00"/>
 
 
 
@@ -137,6 +137,82 @@
 </div>
 
 <div id="main" role="main">
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
+         
+		<span class="entry-date date published updated"><time datetime="2013-05-22 00:00:00 &#43;0000 UTC"><a href="/posts/sample-post-images/">May 22, 2013</a></time></span>
+        
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        Reading time ~1 minute
+      </span>
+    </div>
+    
+	<h1 class="entry-title"><a href="/posts/sample-post-images/" rel="bookmark" title="A Post with Images" itemprop="url">A Post with Images</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    
+
+<p>Here are some examples of what a post with images might look like. If you want to display two or three images next to each other responsively use <code>figure</code> with the appropriate <code>class</code>. Each instance of <code>figure</code> is auto-numbered and displayed in the caption.</p>
+
+<h2 id="figures-for-images-or-video">Figures (for images or video)</h2>
+
+<h3 id="one-up">One Up</h3>
+
+<figure>
+    <a href="//farm9.staticflickr.com/8426/7758832526_cc8f681e48_b.jpg"><img src="//farm9.staticflickr.com/8426/7758832526_cc8f681e48_c.jpg" alt=""></a>
+    <figcaption><a href="//www.flickr.com/photos/80901381@N04/7758832526/" title="Morning Fog Emerging From Trees by A Guy Taking Pictures, on Flickr">Morning Fog Emerging From Trees by A Guy Taking Pictures, on Flickr</a>.</figcaption>
+</figure>
+
+<h3 id="two-up">Two Up</h3>
+
+<p>Apply the <code>half</code> class like so to display two images side by side that share the same caption.</p>
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">&lt;</span><span style="color: #f92672">figure</span> <span style="color: #a6e22e">class</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;half&quot;</span><span style="color: #f8f8f2">&gt;</span>
+	<span style="color: #f8f8f2">&lt;</span><span style="color: #f92672">img</span> <span style="color: #a6e22e">src</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;/images/image-filename-1.jpg&quot;</span> <span style="color: #a6e22e">alt</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;&quot;</span><span style="color: #f8f8f2">&gt;</span>
+	<span style="color: #f8f8f2">&lt;</span><span style="color: #f92672">img</span> <span style="color: #a6e22e">src</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;/images/image-filename-2.jpg&quot;</span> <span style="color: #a6e22e">alt</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;&quot;</span><span style="color: #f8f8f2">&gt;</span>
+	<span style="color: #f8f8f2">&lt;</span><span style="color: #f92672">figcaption</span><span style="color: #f8f8f2">&gt;</span>Caption describing these two images.<span style="color: #f8f8f2">&lt;/</span><span style="color: #f92672">figcaption</span><span style="color: #f8f8f2">&gt;</span>
+<span style="color: #f8f8f2">&lt;/</span><span style="color: #f92672">figure</span><span style="color: #f8f8f2">&gt;</span>
+</pre></div>
+
+<p>And you&rsquo;ll get something that looks like this:</p>
+
+<figure class="half">
+    <a href="//placehold.it/1200x600.jpg"><img src="//placehold.it/600x300.jpg" alt=""></a>
+    <a href="//placehold.it/1200x600.jpg"><img src="//placehold.it/600x300.jpg" alt=""></a>
+    <img src="//placehold.it/600x300.jpg" alt="">
+    <img src="//placehold.it/600x300.jpg" alt="">
+    <figcaption>Two images.</figcaption>
+</figure>
+
+<h3 id="three-up">Three Up</h3>
+
+<p>Apply the <code>third</code> class like so to display three images side by side that share the same caption.</p>
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">&lt;</span><span style="color: #f92672">figure</span> <span style="color: #a6e22e">class</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;third&quot;</span><span style="color: #f8f8f2">&gt;</span>
+	<span style="color: #f8f8f2">&lt;</span><span style="color: #f92672">a</span> <span style="color: #a6e22e">href</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;//placehold.it/1200x600.jpg&quot;</span><span style="color: #f8f8f2">&gt;&lt;</span><span style="color: #f92672">img</span> <span style="color: #a6e22e">src</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;//placehold.it/600x300.jpg&quot;</span> <span style="color: #a6e22e">alt</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;&quot;</span><span style="color: #f8f8f2">&gt;&lt;/</span><span style="color: #f92672">a</span><span style="color: #f8f8f2">&gt;</span>
+	<span style="color: #f8f8f2">&lt;</span><span style="color: #f92672">a</span> <span style="color: #a6e22e">href</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;//placehold.it/1200x600.jpg&quot;</span><span style="color: #f8f8f2">&gt;&lt;</span><span style="color: #f92672">img</span> <span style="color: #a6e22e">src</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;//placehold.it/600x300.jpg&quot;</span> <span style="color: #a6e22e">alt</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;&quot;</span><span style="color: #f8f8f2">&gt;&lt;/</span><span style="color: #f92672">a</span><span style="color: #f8f8f2">&gt;</span>
+	<span style="color: #f8f8f2">&lt;</span><span style="color: #f92672">a</span> <span style="color: #a6e22e">href</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;//placehold.it/1200x600.jpg&quot;</span><span style="color: #f8f8f2">&gt;&lt;</span><span style="color: #f92672">img</span> <span style="color: #a6e22e">src</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;//placehold.it/600x300.jpg&quot;</span> <span style="color: #a6e22e">alt</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;&quot;</span><span style="color: #f8f8f2">&gt;&lt;/</span><span style="color: #f92672">a</span><span style="color: #f8f8f2">&gt;</span>
+	<span style="color: #f8f8f2">&lt;</span><span style="color: #f92672">figcaption</span><span style="color: #f8f8f2">&gt;</span>Caption describing these three images.<span style="color: #f8f8f2">&lt;/</span><span style="color: #f92672">figcaption</span><span style="color: #f8f8f2">&gt;</span>
+<span style="color: #f8f8f2">&lt;/</span><span style="color: #f92672">figure</span><span style="color: #f8f8f2">&gt;</span>
+</pre></div>
+
+<p>And you&rsquo;ll get something that looks like this:</p>
+
+<figure class="third">
+    <a href="//placehold.it/1200x600.jpg"><img src="//placehold.it/600x300.jpg" alt=""></a>
+    <a href="//placehold.it/1200x600.jpg"><img src="//placehold.it/600x300.jpg" alt=""></a>
+    <a href="//placehold.it/1200x600.jpg"><img src="//placehold.it/600x300.jpg" alt=""></a>
+    <a href="//placehold.it/1200x600.jpg"><img src="//placehold.it/600x300.jpg" alt=""></a>
+    <a href="//placehold.it/1200x600.jpg"><img src="//placehold.it/600x300.jpg" alt=""></a>
+    <a href="//placehold.it/1200x600.jpg"><img src="//placehold.it/600x300.jpg" alt=""></a>
+    <figcaption>Three images.</figcaption>
+</figure>
+
+  </div>
+</article>
 
 <article class="hentry">
   <header>
