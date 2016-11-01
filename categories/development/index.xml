@@ -9,6 +9,22 @@
     <atom:link href="http://ctownsen357.github.io/categories/development/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Argument List Too Long</title>
+      <link>http://ctownsen357.github.io/posts/argument-list-too-log/</link>
+      <pubDate>Tue, 01 Nov 2016 15:47:38 -0400</pubDate>
+      
+      <guid>http://ctownsen357.github.io/posts/argument-list-too-log/</guid>
+      <description>&lt;p&gt;You know it before you even try.  You try anyway.  Something like trying to bzip2 316,387 CSV files representing ~ 10TB of data.  You know it will be at least &lt;sup&gt;1&lt;/sup&gt;&amp;frasl;&lt;sub&gt;10&lt;/sub&gt; the size and R can handle the bzip2 files directly so you call bzip2 and get the argument list too long error.  Find and xargs to the rescue!  Also, lbzip2 because you really don&amp;rsquo;t want to wait on bzip2 any more than you have to.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;find path_to_files/ -name &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;*.csv&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;|&lt;/span&gt; xargs -P &lt;span style=&#34;color: #ae81ff&#34;&gt;5&lt;/span&gt; lbzip2
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; you&amp;rsquo;ll want to balance the number of parallel lbzip2 instances (or whatever you are running) as indicated by -P 5 above, balance that with the fact that lbzip2 runs in parallel too.&lt;/p&gt;
+
+&lt;p&gt;It still took a long time to compress 316,387 files but it went a whole lot faster with parallel instances of parallel bzip2 using the xargs -P flag.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>CoreOS Mount NTFS Share</title>
       <link>http://ctownsen357.github.io/posts/coreos-mount-ntfs-share/</link>
       <pubDate>Tue, 01 Nov 2016 14:12:12 -0400</pubDate>

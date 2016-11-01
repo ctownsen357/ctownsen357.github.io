@@ -37,7 +37,7 @@
     <meta property="og:image" content="http://ctownsen357.github.io/abstract-2.jpg" />
 
 
-  <meta property="og:updated_time" content="2016-11-01T14:12:12-04:00"/>
+  <meta property="og:updated_time" content="2016-11-01T15:47:38-04:00"/>
 
 
 
@@ -140,6 +140,34 @@
 </div>
 
 <div id="main" role="main">
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
+         
+		<span class="entry-date date published updated"><time datetime="2016-11-01 15:47:38 -0400 EDT"><a href="/posts/argument-list-too-log/">Nov 1, 2016</a></time></span>
+        
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        Reading time ~1 minute
+      </span>
+    </div>
+    
+	<h1 class="entry-title"><a href="/posts/argument-list-too-log/" rel="bookmark" title="Argument List Too Long" itemprop="url">Argument List Too Long</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <p>You know it before you even try.  You try anyway.  Something like trying to bzip2 316,387 CSV files representing ~ 10TB of data.  You know it will be at least <sup>1</sup>&frasl;<sub>10</sub> the size and R can handle the bzip2 files directly so you call bzip2 and get the argument list too long error.  Find and xargs to the rescue!  Also, lbzip2 because you really don&rsquo;t want to wait on bzip2 any more than you have to.</p>
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>find path_to_files/ -name <span style="color: #e6db74">&quot;*.csv&quot;</span> <span style="color: #f8f8f2">|</span> xargs -P <span style="color: #ae81ff">5</span> lbzip2
+</pre></div>
+
+<p><strong>Note:</strong> you&rsquo;ll want to balance the number of parallel lbzip2 instances (or whatever you are running) as indicated by -P 5 above, balance that with the fact that lbzip2 runs in parallel too.</p>
+
+<p>It still took a long time to compress 316,387 files but it went a whole lot faster with parallel instances of parallel bzip2 using the xargs -P flag.</p>
+
+  </div>
+</article>
 
 <article class="hentry">
   <header>
@@ -260,36 +288,6 @@ sudo /tmp/mount.cifs <span style="color: #e6db74">&quot;//1.1.1.1/ntfs_share&quo
 </pre></div>
 
 <p>In this example I&rsquo;m forwarding an RDP connection to a machine on some internal network IP address through a public facing SSH server.  I&rsquo;ve found this sort of tunelling through SSH to be invaluable and I&rsquo;ve used it for everything from accessing Windows servers over RDP where the only external access was a key protected SSH server to forwarding http/https traffic to remote APIs for testing and debugging.</p>
-
-  </div>
-</article>
-
-<article class="hentry">
-  <header>
-    
-    <div class="entry-meta">
-         
-		<span class="entry-date date published updated"><time datetime="2013-10-26 00:00:00 &#43;0000 UTC"><a href="/posts/background-image/">Oct 26, 2013</a></time></span>
-        
-      <span class="entry-reading-time">
-        <i class="fa fa-clock-o"></i>
-        Reading time ~1 minute
-      </span>
-    </div>
-    
-	<h1 class="entry-title"><a href="/posts/background-image/" rel="bookmark" title="Post with a Background Image" itemprop="url">Post with a Background Image</a></h1>
-    
-  </header>
-  <div class="entry-content">
-    <p>Here be a sample post with a custom background image. To utilize this &ldquo;feature&rdquo; just add the following YAML to a post&rsquo;s front matter.</p>
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #ae81ff">background</span><span style="color: #f8f8f2">:</span> <span style="color: #ae81ff">/images/filename.png</span>
-</pre></div>
-
-<p>This little bit of YAML makes the assumption that your background image asset is in the <code>/images</code> folder. If you place it somewhere else or are hotlinking from the web, just include the full http(s):// URL. Either way you should have a background image that is tiled.</p>
-
-<p>If you want to set a background image for the entire site just add <code>background: /images/filename.png</code> as a <a href="https://gohugo.io/overview/configuration/#examples">param</a> in your config and BOOM &mdash; background images on every page!</p>
-
-<div xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/" about="http://subtlepatterns.com" class="notice">Background images from <span property="dct:title">Subtle Patterns</span> (<a rel="cc:attributionURL" property="cc:attributionName" href="http://subtlepatterns.com">Subtle Patterns</a>) / <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a></div>
 
   </div>
 </article>
