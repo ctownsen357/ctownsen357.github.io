@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ctownsen357@github.io</title>
+    <link>http://ctownsen357.github.io/tags/history/index.xml</link>
+    <description>Recent content on ctownsen357@github.io</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-gb</language>
+    <atom:link href="http://ctownsen357.github.io/tags/history/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>control&#43;r</title>
+      <link>http://ctownsen357.github.io/posts/control-r/</link>
+      <pubDate>Tue, 01 Nov 2016 09:32:58 -0400</pubDate>
+      
+      <guid>http://ctownsen357.github.io/posts/control-r/</guid>
+      <description>&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;ctl+r...
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Control plus r and start typing part of a command you want to recall - searches the history from the terminal.  This is an old but good one.  Even after several years of doing command line work I still use this one fondly as it took several years of work prior to discovering this trick to stumble upon it!&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

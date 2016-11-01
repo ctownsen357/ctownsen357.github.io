@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>Docker &#8211; ctownsen357@github.io</title>
+<meta name="description" content="">
+
+    
+
+
+
+
+
+<meta name="twitter:title" content="Docker">
+<meta name="twitter:description" content="Things I&#39;ve learned.">
+
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker">
+<meta property="og:description" content="Things I&#39;ve learned.">
+<meta property="og:url" content="http://ctownsen357.github.io/categories/docker/">
+<meta property="og:site_name" content="ctownsen357@github.io">
+
+
+
+  <meta property="og:updated_time" content="2016-11-01T09:38:04-04:00"/>
+
+
+
+
+
+
+<link rel="canonical" href="http://ctownsen357.github.io/categories/docker/">
+
+  <link href="http://ctownsen357.github.io/categories/docker/index.xml" rel="alternate" type="application/rss+xml" title="ctownsen357@github.io" />
+  <link href="http://ctownsen357.github.io/categories/docker/index.xml" rel="feed" type="application/rss+xml" title="ctownsen357@github.io" />
+
+
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<meta name="generator" content="Hugo 0.17" />
+
+<script src="/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+
+<link rel="shortcut icon" href="/favicon.png">
+
+
+</head>
+
+<body id="post-index" >
+<nav id="dl-menu" class="dl-menuwrapper" role="navigation">
+	<button class="dl-trigger">Open Menu</button>
+	<ul class="dl-menu">
+		<li><a href="/">Home</a></li>
+		<li>
+			<a href="#">About</a>
+			<ul class="dl-submenu">
+			
+				<li>
+					
+					<img src="/images/profile.jpg" alt="Chris Townsend's photo" class="author-photo">
+					
+					<h4>Chris Townsend</h4>
+					<p>Software engineer, always learning and improving my craft.</p>
+				</li>
+				<li><a href="/about/"><span class="btn btn-inverse">Learn More</span></a></li>
+				
+				
+				
+				
+				
+				<li>
+					<a href="https://github.com/ctownsen357"><i class="fa fa-fw fa-github"></i> GitHub</a>
+				</li>
+				
+				
+				
+				
+			
+			</ul>
+		</li>
+		<li>
+			<a href="#">Posts</a>
+			<ul class="dl-submenu">
+				<li><a href="/posts/">All Posts</a></li>
+				<li><a href="/tags/">All Tags</a></li>
+			</ul>
+		</li>
+		
+	    <li><a href="http://stackoverflow.com/users/809198/chris-townsend" target="_blank">Stack Overflow Profile</a></li>
+	  
+	    <li><a href="https://twitter.com/FlyFishCarolina" target="_blank">Twitter</a></li>
+	  
+	</ul>
+</nav>
+
+<div class="entry-header">
+  
+  <div class="header-title">
+    <div class="header-title-wrap">
+		<h1><a href="/" title="Go to the homepage">ctownsen357@github.io</a></h1>
+	  <h2>
+            
+            
+              Docker
+            
+          </h2>
+    </div>
+  </div>
+</div>
+
+<div id="main" role="main">
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
+         
+		<span class="entry-date date published updated"><time datetime="2016-11-01 09:38:04 -0400 EDT"><a href="/posts/awk-mon/">Nov 1, 2016</a></time></span>
+        
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        Reading time ~1 minute
+      </span>
+    </div>
+    
+	<h1 class="entry-title"><a href="/posts/awk-mon/" rel="bookmark" title="Monitor Docker Events with Awk" itemprop="url">Monitor Docker Events with Awk</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <p>I recently wrote a Docker event monitor in Go as an excercise to demonstrate some proficiency in Go and Docker.  Before getting started I was thinking about how it could be done with piping, bash, and awk.  It was actually really easy to do.  Some of the excercise requirements were:</p>
+
+<ul>
+<li>The service should monitor the Docker API for restart events</li>
+<li>The service should run an arbitrary command in response to that event.</li>
+<li>The arbitrary command should be supplied via a config file.</li>
+</ul>
+
+<p>The pipe, bash, awk solution:</p>
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">echo</span> <span style="color: #e6db74">&#39; pwd&#39;</span> &gt; cmd.txt <span style="color: #f92672">&amp;&amp;</span> docker events <span style="color: #f8f8f2">|</span> awk <span style="color: #e6db74">&#39;/container restart/{system(&quot;echo docker exec &quot; $4 &quot; $(cat cmd.txt) | bash -&quot;)}&#39;</span>
+</pre></div>
+
+<p>This pipes the pwd command into a file and then pipes the stream from docker events into awk which is searching for the restart event.  When the restart event is encountered it executes the arbitrary command from the text file against the restarted container.  The command in the text file could be replaced with any desired command.</p>
+
+<p>There were other requirements that made it interesting to think through in Go.  I&rsquo;ll be posting the entire excercise and my code soon.</p>
+
+  </div>
+</article>
+
+
+
+
+
+</div>
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span> Powered by <a href="https://gohugo.io/" rel="nofollow">Hugo</a> using the <a href="https://github.com/dldx/hpstr-hugo-theme" rel="nofollow">HPSTR</a> theme.</span>
+
+  </footer>
+</div>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="\/js\/vendor\/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="/js/scripts.min.js"></script>
+
+
+
+</body>
+</html>
+

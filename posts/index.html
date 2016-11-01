@@ -37,7 +37,7 @@
     <meta property="og:image" content="http://ctownsen357.github.io/abstract-2.jpg" />
 
 
-  <meta property="og:updated_time" content="2016-10-31T21:11:01-04:00"/>
+  <meta property="og:updated_time" content="2016-11-01T09:38:04-04:00"/>
 
 
 
@@ -140,6 +140,67 @@
 </div>
 
 <div id="main" role="main">
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
+         
+		<span class="entry-date date published updated"><time datetime="2016-11-01 09:38:04 -0400 EDT"><a href="/posts/awk-mon/">Nov 1, 2016</a></time></span>
+        
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        Reading time ~1 minute
+      </span>
+    </div>
+    
+	<h1 class="entry-title"><a href="/posts/awk-mon/" rel="bookmark" title="Monitor Docker Events with Awk" itemprop="url">Monitor Docker Events with Awk</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <p>I recently wrote a Docker event monitor in Go as an excercise to demonstrate some proficiency in Go and Docker.  Before getting started I was thinking about how it could be done with piping, bash, and awk.  It was actually really easy to do.  Some of the excercise requirements were:</p>
+
+<ul>
+<li>The service should monitor the Docker API for restart events</li>
+<li>The service should run an arbitrary command in response to that event.</li>
+<li>The arbitrary command should be supplied via a config file.</li>
+</ul>
+
+<p>The pipe, bash, awk solution:</p>
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">echo</span> <span style="color: #e6db74">&#39; pwd&#39;</span> &gt; cmd.txt <span style="color: #f92672">&amp;&amp;</span> docker events <span style="color: #f8f8f2">|</span> awk <span style="color: #e6db74">&#39;/container restart/{system(&quot;echo docker exec &quot; $4 &quot; $(cat cmd.txt) | bash -&quot;)}&#39;</span>
+</pre></div>
+
+<p>This pipes the pwd command into a file and then pipes the stream from docker events into awk which is searching for the restart event.  When the restart event is encountered it executes the arbitrary command from the text file against the restarted container.  The command in the text file could be replaced with any desired command.</p>
+
+<p>There were other requirements that made it interesting to think through in Go.  I&rsquo;ll be posting the entire excercise and my code soon.</p>
+
+  </div>
+</article>
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
+         
+		<span class="entry-date date published updated"><time datetime="2016-11-01 09:32:58 -0400 EDT"><a href="/posts/control-r/">Nov 1, 2016</a></time></span>
+        
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        Reading time ~1 minute
+      </span>
+    </div>
+    
+	<h1 class="entry-title"><a href="/posts/control-r/" rel="bookmark" title="control&#43;r" itemprop="url">control&#43;r</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>ctl+r...
+</pre></div>
+
+<p>Control plus r and start typing part of a command you want to recall - searches the history from the terminal.  This is an old but good one.  Even after several years of doing command line work I still use this one fondly as it took several years of work prior to discovering this trick to stumble upon it!</p>
+
+  </div>
+</article>
 
 <article class="hentry">
   <header>
@@ -325,54 +386,6 @@
   </div>
 </article>
 
-<article class="hentry">
-  <header>
-    
-    <div class="entry-meta">
-         
-		<span class="entry-date date published updated"><time datetime="2013-08-12 00:00:00 &#43;0000 UTC"><a href="/posts/sample-link-post/">Aug 12, 2013</a></time></span>
-        
-      <span class="entry-reading-time">
-        <i class="fa fa-clock-o"></i>
-        Reading time ~1 minute
-      </span>
-    </div>
-    
-      <h1 class="entry-title"><a href="/posts/sample-link-post/" class="permalink" rel="bookmark" title="Sample Link Post"><i class="fa fa-bookmark"></i></a> <a href="http://mademistakes.com">Sample Link Post</a></h1>
-    
-  </header>
-  <div class="entry-content">
-    <p>This theme supports <strong>link posts</strong>, made famous by John Gruber. To use, just add <code>link: http://url-you-want-linked</code> to the post&rsquo;s YAML front matter and you&rsquo;re done.</p>
-
-  </div>
-</article>
-
-<article class="hentry">
-  <header>
-    
-    <div class="entry-meta">
-         
-		<span class="entry-date date published updated"><time datetime="2013-06-25 00:00:00 &#43;0000 UTC"><a href="/posts/video-post/">Jun 25, 2013</a></time></span>
-        
-      <span class="entry-reading-time">
-        <i class="fa fa-clock-o"></i>
-        Reading time ~1 minute
-      </span>
-    </div>
-    
-	<h1 class="entry-title"><a href="/posts/video-post/" rel="bookmark" title="A Post with a Video" itemprop="url">A Post with a Video</a></h1>
-    
-  </header>
-  <div class="entry-content">
-    <iframe width="560" height="315" src="//www.youtube.com/embed/SU3kYxJmWuQ" frameborder="0"></iframe>
-
-<p>Video embeds are responsive and scale with the width of the main content block with the help of <a href="http://fitvidsjs.com/">FitVids</a>.</p>
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">&lt;</span><span style="color: #f92672">iframe</span> <span style="color: #a6e22e">width</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;560&quot;</span> <span style="color: #a6e22e">height</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;315&quot;</span> <span style="color: #a6e22e">src</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;//www.youtube.com/embed/SU3kYxJmWuQ&quot;</span> <span style="color: #a6e22e">frameborder</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;0&quot;</span><span style="color: #f8f8f2">&gt;&lt;/</span><span style="color: #f92672">iframe</span><span style="color: #f8f8f2">&gt;</span>
-</pre></div>
-
-  </div>
-</article>
-
 
 
 
@@ -391,6 +404,10 @@
 	
     
 	<li><a href="/posts/page/2/">2</a></li>
+    
+	
+    
+	<li><a href="/posts/page/3/">3</a></li>
     
 	
 

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ctownsen357@github.io</title>
+    <link>http://ctownsen357.github.io/categories/monitor/index.xml</link>
+    <description>Recent content on ctownsen357@github.io</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-gb</language>
+    <atom:link href="http://ctownsen357.github.io/categories/monitor/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Monitor Docker Events with Awk</title>
+      <link>http://ctownsen357.github.io/posts/awk-mon/</link>
+      <pubDate>Tue, 01 Nov 2016 09:38:04 -0400</pubDate>
+      
+      <guid>http://ctownsen357.github.io/posts/awk-mon/</guid>
+      <description>&lt;p&gt;I recently wrote a Docker event monitor in Go as an excercise to demonstrate some proficiency in Go and Docker.  Before getting started I was thinking about how it could be done with piping, bash, and awk.  It was actually really easy to do.  Some of the excercise requirements were:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;The service should monitor the Docker API for restart events&lt;/li&gt;
+&lt;li&gt;The service should run an arbitrary command in response to that event.&lt;/li&gt;
+&lt;li&gt;The arbitrary command should be supplied via a config file.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The pipe, bash, awk solution:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39; pwd&amp;#39;&lt;/span&gt; &amp;gt; cmd.txt &lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; docker events &lt;span style=&#34;color: #f8f8f2&#34;&gt;|&lt;/span&gt; awk &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;/container restart/{system(&amp;quot;echo docker exec &amp;quot; $4 &amp;quot; $(cat cmd.txt) | bash -&amp;quot;)}&amp;#39;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This pipes the pwd command into a file and then pipes the stream from docker events into awk which is searching for the restart event.  When the restart event is encountered it executes the arbitrary command from the text file against the restarted container.  The command in the text file could be replaced with any desired command.&lt;/p&gt;
+
+&lt;p&gt;There were other requirements that made it interesting to think through in Go.  I&amp;rsquo;ll be posting the entire excercise and my code soon.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
