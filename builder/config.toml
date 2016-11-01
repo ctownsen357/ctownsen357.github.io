@@ -1,0 +1,19 @@
+baseurl = "http://ctownsen357.github.io/"
+languageCode = "en-gb"
+title = "ctownsen357@github.io"
+theme = "hpstr"
+pluralizelisttitles = false
+PygmentsCodeFences = true
+Paginate = 5
+disqusShortname = "ctownsen357"
+[params]
+	subtitle = "Things I've learned."
+	[params.author]
+		name = "Chris Townsend"
+		avatar = "/images/profile.jpg"
+		bio = "Software engineer, always learning and improving my craft."
+		github = "ctownsen357"
+	[params.image]
+	  feature = "/images/abstract-1.jpg"
+	  credit = "ctownsend"
+	  creditlink = "http://www.dargadgetz.com/ios-7-abstract-wallpaper-pack-for-iphone-5-and-ipod-touch-retina/"
