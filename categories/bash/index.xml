@@ -14,8 +14,10 @@
       <pubDate>Mon, 31 Oct 2016 21:11:01 -0400</pubDate>
       
       <guid>http://ctownsen357.github.io/posts/port-forwarding/</guid>
-      <description>&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;ssh blah
+      <description>&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;ssh -NL 3389:internal.network.ip.address:3389 user@public.ip.address
 &lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;In this example I&amp;rsquo;m forwarding an RDP connection to a machine on some internal network IP address through a public facing SSH server.  I&amp;rsquo;ve found this sort of tunelling through SSH to be invaluable and I&amp;rsquo;ve used it for everything from accessing Windows servers over RDP where the only external access was a key protected SSH server to forwarding http/https traffic to remote APIs for testing and debugging.&lt;/p&gt;
 </description>
     </item>
     
