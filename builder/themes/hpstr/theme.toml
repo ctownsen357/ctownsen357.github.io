@@ -8,7 +8,7 @@ features = ["comments", "scss", "menu"]
 
 [author]
   name = "Chris Townsend"
-  homepage = ""
+  homepage = "http://ctownsen357.github.io/"
 
 # If porting an existing theme
 [original]
