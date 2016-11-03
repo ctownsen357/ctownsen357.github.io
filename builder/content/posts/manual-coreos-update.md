@@ -14,7 +14,6 @@ Categories = [
 
 +++
 
-{{ template "_internal/google_analytics_async.html" . }}
 
 This forces a manual update if one is available:
 ```{bash}
