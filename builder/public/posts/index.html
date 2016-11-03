@@ -37,7 +37,7 @@
     <meta property="og:image" content="http://ctownsen357.github.io/abstract-2.jpg" />
 
 
-  <meta property="og:updated_time" content="2016-11-01T15:47:38-04:00"/>
+  <meta property="og:updated_time" content="2016-11-03T17:00:49-04:00"/>
 
 
 
@@ -140,6 +140,32 @@
 </div>
 
 <div id="main" role="main">
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
+         
+		<span class="entry-date date published updated"><time datetime="2016-11-03 17:00:49 -0400 EDT"><a href="/posts/manual-coreos-update/">Nov 3, 2016</a></time></span>
+        
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        Reading time ~1 minute
+      </span>
+    </div>
+    
+	<h1 class="entry-title"><a href="/posts/manual-coreos-update/" rel="bookmark" title="Manual CoreOS Update" itemprop="url">Manual CoreOS Update</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <p>{{ template &ldquo;_internal/google_analytics_async.html&rdquo; . }}</p>
+
+<p>This forces a manual update if one is available:</p>
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>update_engine_client -update
+</pre></div>
+
+  </div>
+</article>
 
 <article class="hentry">
   <header>
@@ -265,31 +291,6 @@ sudo /tmp/mount.cifs <span style="color: #e6db74">&quot;//1.1.1.1/ntfs_share&quo
 </pre></div>
 
 <p>Control plus r and start typing part of a command you want to recall - searches the history from the terminal.  This is an old but good one.  Even after several years of doing command line work I still use this one fondly as it took several years of work prior to discovering this trick to stumble upon it!</p>
-
-  </div>
-</article>
-
-<article class="hentry">
-  <header>
-    
-    <div class="entry-meta">
-         
-		<span class="entry-date date published updated"><time datetime="2016-10-31 21:11:01 -0400 EDT"><a href="/posts/port-forwarding/">Oct 31, 2016</a></time></span>
-        
-      <span class="entry-reading-time">
-        <i class="fa fa-clock-o"></i>
-        Reading time ~1 minute
-      </span>
-    </div>
-    
-	<h1 class="entry-title"><a href="/posts/port-forwarding/" rel="bookmark" title="port forwarding" itemprop="url">port forwarding</a></h1>
-    
-  </header>
-  <div class="entry-content">
-    <div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>ssh -NL 3389:internal.network.ip.address:3389 user@public.ip.address
-</pre></div>
-
-<p>In this example I&rsquo;m forwarding an RDP connection to a machine on some internal network IP address through a public facing SSH server.  I&rsquo;ve found this sort of tunelling through SSH to be invaluable and I&rsquo;ve used it for everything from accessing Windows servers over RDP where the only external access was a key protected SSH server to forwarding http/https traffic to remote APIs for testing and debugging.</p>
 
   </div>
 </article>
