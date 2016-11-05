@@ -9,11 +9,9 @@ type: post
 This site consists of short posts about things I've learned and find useful.
 
 ### Me
-I am a Senior Software Engineer at Applied Research Associates, Inc. in Raleigh, NC.  I work on a variety of distributed computing projects utilizing Apache Spark and other compute platforms / frameworks. I have a great deal of experience with very large databases (SQL Server and Postgresql) as well as setting up and running applications out on Amazon's AWS utilizing their EC2 compute resources.
+I am a Senior Software Engineer at Applied Research Associates, Inc., and have created a variety of distributed computing products utilizing Apache Spark and other high-performance computing platforms.  I have experience designing, and developing very large databases (SQL Server, PostgreSQL, Apache Drill) as well as developing, maintaining, and running applications on Amazon’s AWS utilizing their EC2 compute resources and web services.  
 
-I have also developed many REST based APIs and web applications on both Linux and Windows platforms.
-
-Most recently I have been doing a lot of DevOps style work in the field of automation, deployment, and clustering out on AWS and private cloud infrastructure with Docker, Swarm, CoreOS, and RancherOS.
+I have also developed many REST based APIs and web applications on both Linux and Windows.  Most recently, I have been tasked with a variety of DevOps work - including building, orchestrating, and monitoring Docker container-based systems on a variety of implementations ranging from local clusters to AWS based infrastructure. 
 
 Have a great day!
 
