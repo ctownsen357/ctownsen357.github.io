@@ -6,8 +6,74 @@
     <description>Recent content in Posts-rss on ctownsen357@github.io</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
-    <lastBuildDate>Thu, 03 Nov 2016 17:00:49 -0400</lastBuildDate>
+    <lastBuildDate>Tue, 08 Nov 2016 16:28:48 -0500</lastBuildDate>
     <atom:link href="http://ctownsen357.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>GlusterFS &amp; Docker</title>
+      <link>http://ctownsen357.github.io/posts/glusterfs-docker/</link>
+      <pubDate>Tue, 08 Nov 2016 16:28:48 -0500</pubDate>
+      
+      <guid>http://ctownsen357.github.io/posts/glusterfs-docker/</guid>
+      <description>
+
+&lt;p&gt;I&amp;rsquo;ve recently started exploring &lt;a href=&#34;https://www.gluster.org/&#34;&gt;GlusterFS&lt;/a&gt; in Docker containers to use as persistent storage for the Dockerized services and applications I&amp;rsquo;ve been working on.  If this is performant enough then for my purposes it will close the gap for me to really treat the data center as one giant computer.  Getting started was pretty straight forward.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; This is a quick example.  Make sure you read up on security, changing the default password, and review the original Dockerfile.  I&amp;rsquo;ll be experimenting with running this out on AWS soon and should be able to further tighten up my example.&lt;/p&gt;
+
+&lt;h3 id=&#34;get-the-latest-gluster-container&#34;&gt;Get the latest Gluster container:&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/gluster/gluster-containers&#34;&gt;Get the latest container:&lt;/a&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;docker pull gluster/gluster-centos
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3 id=&#34;make-the-persistent-data-folders-on-each-host&#34;&gt;Make the persistent data folders on each host:&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;sudo mkdir -p /gluster/logs &lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo mkdir /gluster/data &lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo mkdir /gluster/config &lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; /gluster/mnt
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3 id=&#34;start-a-glusterfs-container-on-each-host&#34;&gt;Start a GlusterFS container on each host:&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;docker run -d &lt;span style=&#34;color: #ae81ff&#34;&gt;\&lt;/span&gt;
+   --name gluster &lt;span style=&#34;color: #ae81ff&#34;&gt;\&lt;/span&gt;
+   --privileged &lt;span style=&#34;color: #ae81ff&#34;&gt;\&lt;/span&gt;
+   --net&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;host &lt;span style=&#34;color: #ae81ff&#34;&gt;\&lt;/span&gt;
+   -v /gluster/data:/gluster &lt;span style=&#34;color: #ae81ff&#34;&gt;\&lt;/span&gt;
+   -v /gluster/logs:/var/log/glusterfs &lt;span style=&#34;color: #ae81ff&#34;&gt;\&lt;/span&gt;
+   -v /gluster/config:/var/lib/glusterd &lt;span style=&#34;color: #ae81ff&#34;&gt;\&lt;/span&gt;
+   -v /gluster/mnt:/gluster/mnt &lt;span style=&#34;color: #ae81ff&#34;&gt;\&lt;/span&gt;
+   gluster/gluster-centos
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3 id=&#34;probe-the-hosts-in-the-cluster&#34;&gt;Probe the hosts in the cluster:&lt;/h3&gt;
+
+&lt;p&gt;For each container on each host you&amp;rsquo;ll want to execute this to get them aware of the other peers.  If running out on AWS these steps could be orchestrated through the init system on the hosts so you don&amp;rsquo;t have to log into each machine.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;gluster peer probe 1.1.1.1
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3 id=&#34;now-create-your-volume-and-start-it&#34;&gt;Now create your volume and start it:&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;gluster volume create media replica &lt;span style=&#34;color: #ae81ff&#34;&gt;3&lt;/span&gt; transport tcp 172.30.0.185:/gluster/data  172.30.0.186:/gluster/data 172.30.0.30:/
+gluster volume start media
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;In this example I&amp;rsquo;m replicating across each of three servers but depending on your needs you could: distributed striped, distributed, replicated, distributed striped replicated, &amp;hellip; know what and why.&lt;/p&gt;
+
+&lt;h3 id=&#34;mount-the-volume&#34;&gt;Mount the volume&lt;/h3&gt;
+
+&lt;p&gt;The docs made a big deal out of mounting the volume.  I suspect if you were doing anything other than replicating that would become very important.&lt;/p&gt;
+
+&lt;p&gt;You&amp;rsquo;ll want to do this on each host, using its internal ip:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mount -t glusterfs 172.30.0.186:/media /gluster/mnt
+```{bash}
+
+
+From one of the hosts testing with a write statement to the volume:
+```{bash}
+echo &amp;quot;testing, 1,2,3...&amp;quot; &amp;gt;&amp;gt; /gluster/mnt/test.txt
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And from another host you should be able to read/write to the same document.  One could then launch containers on any host with a mount to /gluster/mnt to store data.  Then it would have access to the data no matter which node it was launched on.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Manual CoreOS Update</title>

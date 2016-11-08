@@ -28,7 +28,7 @@
 
 
 
-  <meta property="og:updated_time" content="2016-11-01T14:12:12-04:00"/>
+  <meta property="og:updated_time" content="2016-11-08T16:28:48-05:00"/>
 
 
 
@@ -125,6 +125,84 @@
 </div>
 
 <div id="main" role="main">
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
+         
+		<span class="entry-date date published updated"><time datetime="2016-11-08 16:28:48 -0500 EST"><a href="/posts/glusterfs-docker/">Nov 8, 2016</a></time></span>
+        
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        Reading time ~2 minutes
+      </span>
+    </div>
+    
+	<h1 class="entry-title"><a href="/posts/glusterfs-docker/" rel="bookmark" title="GlusterFS &amp; Docker" itemprop="url">GlusterFS &amp; Docker</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    
+
+<p>I&rsquo;ve recently started exploring <a href="https://www.gluster.org/">GlusterFS</a> in Docker containers to use as persistent storage for the Dockerized services and applications I&rsquo;ve been working on.  If this is performant enough then for my purposes it will close the gap for me to really treat the data center as one giant computer.  Getting started was pretty straight forward.</p>
+
+<p><strong>Note:</strong> This is a quick example.  Make sure you read up on security, changing the default password, and review the original Dockerfile.  I&rsquo;ll be experimenting with running this out on AWS soon and should be able to further tighten up my example.</p>
+
+<h3 id="get-the-latest-gluster-container">Get the latest Gluster container:</h3>
+
+<p><a href="https://github.com/gluster/gluster-containers">Get the latest container:</a></p>
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>docker pull gluster/gluster-centos
+</pre></div>
+
+<h3 id="make-the-persistent-data-folders-on-each-host">Make the persistent data folders on each host:</h3>
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>sudo mkdir -p /gluster/logs <span style="color: #f92672">&amp;&amp;</span> sudo mkdir /gluster/data <span style="color: #f92672">&amp;&amp;</span> sudo mkdir /gluster/config <span style="color: #f92672">&amp;&amp;</span> /gluster/mnt
+</pre></div>
+
+<h3 id="start-a-glusterfs-container-on-each-host">Start a GlusterFS container on each host:</h3>
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>docker run -d <span style="color: #ae81ff">\</span>
+   --name gluster <span style="color: #ae81ff">\</span>
+   --privileged <span style="color: #ae81ff">\</span>
+   --net<span style="color: #f92672">=</span>host <span style="color: #ae81ff">\</span>
+   -v /gluster/data:/gluster <span style="color: #ae81ff">\</span>
+   -v /gluster/logs:/var/log/glusterfs <span style="color: #ae81ff">\</span>
+   -v /gluster/config:/var/lib/glusterd <span style="color: #ae81ff">\</span>
+   -v /gluster/mnt:/gluster/mnt <span style="color: #ae81ff">\</span>
+   gluster/gluster-centos
+</pre></div>
+
+<h3 id="probe-the-hosts-in-the-cluster">Probe the hosts in the cluster:</h3>
+
+<p>For each container on each host you&rsquo;ll want to execute this to get them aware of the other peers.  If running out on AWS these steps could be orchestrated through the init system on the hosts so you don&rsquo;t have to log into each machine.</p>
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>gluster peer probe 1.1.1.1
+</pre></div>
+
+<h3 id="now-create-your-volume-and-start-it">Now create your volume and start it:</h3>
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>gluster volume create media replica <span style="color: #ae81ff">3</span> transport tcp 172.30.0.185:/gluster/data  172.30.0.186:/gluster/data 172.30.0.30:/
+gluster volume start media
+</pre></div>
+
+<p>In this example I&rsquo;m replicating across each of three servers but depending on your needs you could: distributed striped, distributed, replicated, distributed striped replicated, &hellip; know what and why.</p>
+
+<h3 id="mount-the-volume">Mount the volume</h3>
+
+<p>The docs made a big deal out of mounting the volume.  I suspect if you were doing anything other than replicating that would become very important.</p>
+
+<p>You&rsquo;ll want to do this on each host, using its internal ip:</p>
+
+<pre><code>mount -t glusterfs 172.30.0.186:/media /gluster/mnt
+```{bash}
+
+
+From one of the hosts testing with a write statement to the volume:
+```{bash}
+echo &quot;testing, 1,2,3...&quot; &gt;&gt; /gluster/mnt/test.txt
+</code></pre>
+
+<p>And from another host you should be able to read/write to the same document.  One could then launch containers on any host with a mount to /gluster/mnt to store data.  Then it would have access to the data no matter which node it was launched on.</p>
+
+  </div>
+</article>
 
 <article class="hentry">
   <header>

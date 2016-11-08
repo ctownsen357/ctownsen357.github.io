@@ -31,6 +31,72 @@
     </item>
     
     <item>
+      <title>GlusterFS &amp; Docker</title>
+      <link>http://ctownsen357.github.io/posts/glusterfs-docker/</link>
+      <pubDate>Tue, 08 Nov 2016 16:28:48 -0500</pubDate>
+      
+      <guid>http://ctownsen357.github.io/posts/glusterfs-docker/</guid>
+      <description>
+
+&lt;p&gt;I&amp;rsquo;ve recently started exploring &lt;a href=&#34;https://www.gluster.org/&#34;&gt;GlusterFS&lt;/a&gt; in Docker containers to use as persistent storage for the Dockerized services and applications I&amp;rsquo;ve been working on.  If this is performant enough then for my purposes it will close the gap for me to really treat the data center as one giant computer.  Getting started was pretty straight forward.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; This is a quick example.  Make sure you read up on security, changing the default password, and review the original Dockerfile.  I&amp;rsquo;ll be experimenting with running this out on AWS soon and should be able to further tighten up my example.&lt;/p&gt;
+
+&lt;h3 id=&#34;get-the-latest-gluster-container&#34;&gt;Get the latest Gluster container:&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/gluster/gluster-containers&#34;&gt;Get the latest container:&lt;/a&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;docker pull gluster/gluster-centos
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3 id=&#34;make-the-persistent-data-folders-on-each-host&#34;&gt;Make the persistent data folders on each host:&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;sudo mkdir -p /gluster/logs &lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo mkdir /gluster/data &lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo mkdir /gluster/config &lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; /gluster/mnt
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3 id=&#34;start-a-glusterfs-container-on-each-host&#34;&gt;Start a GlusterFS container on each host:&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;docker run -d &lt;span style=&#34;color: #ae81ff&#34;&gt;\&lt;/span&gt;
+   --name gluster &lt;span style=&#34;color: #ae81ff&#34;&gt;\&lt;/span&gt;
+   --privileged &lt;span style=&#34;color: #ae81ff&#34;&gt;\&lt;/span&gt;
+   --net&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;host &lt;span style=&#34;color: #ae81ff&#34;&gt;\&lt;/span&gt;
+   -v /gluster/data:/gluster &lt;span style=&#34;color: #ae81ff&#34;&gt;\&lt;/span&gt;
+   -v /gluster/logs:/var/log/glusterfs &lt;span style=&#34;color: #ae81ff&#34;&gt;\&lt;/span&gt;
+   -v /gluster/config:/var/lib/glusterd &lt;span style=&#34;color: #ae81ff&#34;&gt;\&lt;/span&gt;
+   -v /gluster/mnt:/gluster/mnt &lt;span style=&#34;color: #ae81ff&#34;&gt;\&lt;/span&gt;
+   gluster/gluster-centos
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3 id=&#34;probe-the-hosts-in-the-cluster&#34;&gt;Probe the hosts in the cluster:&lt;/h3&gt;
+
+&lt;p&gt;For each container on each host you&amp;rsquo;ll want to execute this to get them aware of the other peers.  If running out on AWS these steps could be orchestrated through the init system on the hosts so you don&amp;rsquo;t have to log into each machine.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;gluster peer probe 1.1.1.1
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3 id=&#34;now-create-your-volume-and-start-it&#34;&gt;Now create your volume and start it:&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;gluster volume create media replica &lt;span style=&#34;color: #ae81ff&#34;&gt;3&lt;/span&gt; transport tcp 172.30.0.185:/gluster/data  172.30.0.186:/gluster/data 172.30.0.30:/
+gluster volume start media
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;In this example I&amp;rsquo;m replicating across each of three servers but depending on your needs you could: distributed striped, distributed, replicated, distributed striped replicated, &amp;hellip; know what and why.&lt;/p&gt;
+
+&lt;h3 id=&#34;mount-the-volume&#34;&gt;Mount the volume&lt;/h3&gt;
+
+&lt;p&gt;The docs made a big deal out of mounting the volume.  I suspect if you were doing anything other than replicating that would become very important.&lt;/p&gt;
+
+&lt;p&gt;You&amp;rsquo;ll want to do this on each host, using its internal ip:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mount -t glusterfs 172.30.0.186:/media /gluster/mnt
+```{bash}
+
+
+From one of the hosts testing with a write statement to the volume:
+```{bash}
+echo &amp;quot;testing, 1,2,3...&amp;quot; &amp;gt;&amp;gt; /gluster/mnt/test.txt
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And from another host you should be able to read/write to the same document.  One could then launch containers on any host with a mount to /gluster/mnt to store data.  Then it would have access to the data no matter which node it was launched on.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Manual CoreOS Update</title>
       <link>http://ctownsen357.github.io/posts/manual-coreos-update/</link>
       <pubDate>Thu, 03 Nov 2016 17:00:49 -0400</pubDate>
@@ -456,142 +522,6 @@ sudo mount.cifs &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;//1.1.1.1/n
 &lt;p&gt;Occupy et selvage squid, pug brunch blog nesciunt hashtag mumblecore skateboard yr kogi. Ugh small batch swag four loko. Fap post-ironic qui tote bag farm-to-table american apparel scenester keffiyeh vero, swag non pour-over gentrify authentic pitchfork. Schlitz scenester lo-fi voluptate, tote bag irony bicycle rights pariatur vero Vice freegan wayfarers exercitation nisi shoreditch. Chambray tofu vero sed. Street art swag literally leggings, Cosby sweater mixtape PBR lomo Banksy non in pitchfork ennui McSweeney&amp;rsquo;s selfies. Odd Future Banksy non authentic.&lt;/p&gt;
 
 &lt;p&gt;Aliquip enim artisan dolor post-ironic. Pug tote bag Marfa, deserunt pour-over Portland wolf eu odio intelligentsia american apparel ugh ea. Sunt viral et, 3 wolf moon gastropub pug id. Id fashion axe est typewriter, mlkshk Portland art party aute brunch. Sint pork belly Cosby sweater, deep v mumblecore kitsch american apparel. Try-hard direct trade tumblr sint skateboard. Adipisicing bitters excepteur biodiesel, pickled gastropub aute veniam.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Sample Post</title>
-      <link>http://ctownsen357.github.io/posts/sample-post/</link>
-      <pubDate>Thu, 10 Mar 2011 00:00:00 +0000</pubDate>
-      
-      <guid>http://ctownsen357.github.io/posts/sample-post/</guid>
-      <description>
-
-&lt;p&gt;Below is just about everything you&amp;rsquo;ll need to style in the theme. Check the source code to see the many embedded elements within paragraphs.&lt;/p&gt;
-
-&lt;h1 id=&#34;heading-1&#34;&gt;Heading 1&lt;/h1&gt;
-
-&lt;h2 id=&#34;heading-2&#34;&gt;Heading 2&lt;/h2&gt;
-
-&lt;h3 id=&#34;heading-3&#34;&gt;Heading 3&lt;/h3&gt;
-
-&lt;h4 id=&#34;heading-4&#34;&gt;Heading 4&lt;/h4&gt;
-
-&lt;h5 id=&#34;heading-5&#34;&gt;Heading 5&lt;/h5&gt;
-
-&lt;h6 id=&#34;heading-6&#34;&gt;Heading 6&lt;/h6&gt;
-
-&lt;h3 id=&#34;body-text&#34;&gt;Body text&lt;/h3&gt;
-
-&lt;p&gt;Lorem ipsum dolor sit amet, test link adipiscing elit. &lt;strong&gt;This is strong&lt;/strong&gt;. Nullam dignissim convallis est. Quisque aliquam.&lt;/p&gt;
-
-&lt;p&gt;&lt;img alt=&#34;Smithsonian Image&#34; src=&#34;http://ctownsen357.github.io/images/3953273590_704e3899d5_m.jpg&#34; style=&#34;float: right;&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;This is emphasized&lt;/em&gt;. Donec faucibus. Nunc iaculis suscipit dui. 53 = 125. Water is H&lt;sub&gt;2&lt;/sub&gt;O. Nam sit amet sem. Aliquam libero nisi, imperdiet at, tincidunt nec, gravida vehicula, nisl. The New York Times &lt;cite&gt;(That’s a citation)&lt;/cite&gt;. &lt;u&gt;Underline&lt;/u&gt;. Maecenas ornare tortor. Donec sed tellus eget sapien fringilla nonummy. Mauris a ante. Suspendisse quam sem, consequat at, commodo vitae, feugiat in, nunc. Morbi imperdiet augue quis tellus.&lt;/p&gt;
-
-&lt;p&gt;HTML and &lt;abbr title=&#34;cascading stylesheets&#34;&gt;CSS&lt;abbr&gt; are our tools. Mauris a ante. Suspendisse quam sem, consequat at, commodo vitae, feugiat in, nunc. Morbi imperdiet augue quis tellus. Praesent mattis, massa quis luctus fermentum, turpis mi volutpat justo, eu volutpat enim diam eget metus.&lt;/p&gt;
-
-&lt;h3 id=&#34;blockquotes&#34;&gt;Blockquotes&lt;/h3&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Lorem ipsum dolor sit amet, test link adipiscing elit. Nullam dignissim convallis est. Quisque aliquam.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h2 id=&#34;list-types&#34;&gt;List Types&lt;/h2&gt;
-
-&lt;h3 id=&#34;ordered-lists&#34;&gt;Ordered Lists&lt;/h3&gt;
-
-&lt;ol&gt;
-&lt;li&gt;Item one
-
-&lt;ol&gt;
-&lt;li&gt;sub item one&lt;/li&gt;
-&lt;li&gt;sub item two&lt;/li&gt;
-&lt;li&gt;sub item three&lt;/li&gt;
-&lt;/ol&gt;&lt;/li&gt;
-&lt;li&gt;Item two&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&#34;unordered-lists&#34;&gt;Unordered Lists&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Item one&lt;/li&gt;
-&lt;li&gt;Item two&lt;/li&gt;
-&lt;li&gt;Item three&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;tables&#34;&gt;Tables&lt;/h2&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th align=&#34;left&#34;&gt;Header1&lt;/th&gt;
-&lt;th align=&#34;center&#34;&gt;Header2&lt;/th&gt;
-&lt;th align=&#34;right&#34;&gt;Header3&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;cell1&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;cell2&lt;/td&gt;
-&lt;td align=&#34;right&#34;&gt;cell3&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;cell4&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;cell5&lt;/td&gt;
-&lt;td align=&#34;right&#34;&gt;cell6&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;cell1&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;cell2&lt;/td&gt;
-&lt;td align=&#34;right&#34;&gt;cell3&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;cell4&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;cell5&lt;/td&gt;
-&lt;td align=&#34;right&#34;&gt;cell6&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;Foot1&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;Foot2&lt;/td&gt;
-&lt;td align=&#34;right&#34;&gt;Foot3&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;h2 id=&#34;code-snippets&#34;&gt;Code Snippets&lt;/h2&gt;
-
-&lt;p&gt;Syntax highlighting via Rouge&lt;/p&gt;
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;#container&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
-  &lt;span style=&#34;color: #f8f8f2&#34;&gt;float&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;left;&lt;/span&gt;
-  &lt;span style=&#34;color: #f8f8f2&#34;&gt;margin&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;-240px&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
-  &lt;span style=&#34;color: #f8f8f2&#34;&gt;width&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;100%&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
-&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Non Pygments code example&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;div id=&amp;quot;awesome&amp;quot;&amp;gt;
-    &amp;lt;p&amp;gt;This is great isn&#39;t it?&amp;lt;/p&amp;gt;
-&amp;lt;/div&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;buttons&#34;&gt;Buttons&lt;/h2&gt;
-
-&lt;p&gt;Make any link standout more when applying the &lt;code&gt;.btn&lt;/code&gt; class.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;href&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;#&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;class&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;btn btn-success&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;Success Button&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;/&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;a&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-&lt;div markdown=&#34;0&#34;&gt;&lt;a href=&#34;#&#34; class=&#34;btn&#34;&gt;Primary Button&lt;/a&gt;&lt;/div&gt;
-&lt;div markdown=&#34;0&#34;&gt;&lt;a href=&#34;#&#34; class=&#34;btn btn-success&#34;&gt;Success Button&lt;/a&gt;&lt;/div&gt;
-&lt;div markdown=&#34;0&#34;&gt;&lt;a href=&#34;#&#34; class=&#34;btn btn-warning&#34;&gt;Warning Button&lt;/a&gt;&lt;/div&gt;
-&lt;div markdown=&#34;0&#34;&gt;&lt;a href=&#34;#&#34; class=&#34;btn btn-danger&#34;&gt;Danger Button&lt;/a&gt;&lt;/div&gt;
-&lt;div markdown=&#34;0&#34;&gt;&lt;a href=&#34;#&#34; class=&#34;btn btn-info&#34;&gt;Info Button&lt;/a&gt;&lt;/div&gt;
 </description>
     </item>
     
