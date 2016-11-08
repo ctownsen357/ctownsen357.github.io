@@ -62,9 +62,9 @@ In this example I'm replicating across each of three servers but depending on yo
 The docs made a big deal out of mounting the volume.  I suspect if you were doing anything other than replicating that would become very important.
 
 You'll want to do this on each host, using its internal ip:
-```
-mount -t glusterfs 172.30.0.186:/media /gluster/mnt
 ```{bash}
+mount -t glusterfs 172.30.0.186:/media /gluster/mnt
+```
 
 
 From one of the hosts testing with a write statement to the volume:

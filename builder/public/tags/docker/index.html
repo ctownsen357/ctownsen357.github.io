@@ -189,15 +189,12 @@ gluster volume start media
 <p>The docs made a big deal out of mounting the volume.  I suspect if you were doing anything other than replicating that would become very important.</p>
 
 <p>You&rsquo;ll want to do this on each host, using its internal ip:</p>
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>mount -t glusterfs 172.30.0.186:/media /gluster/mnt
+</pre></div>
 
-<pre><code>mount -t glusterfs 172.30.0.186:/media /gluster/mnt
-```{bash}
-
-
-From one of the hosts testing with a write statement to the volume:
-```{bash}
-echo &quot;testing, 1,2,3...&quot; &gt;&gt; /gluster/mnt/test.txt
-</code></pre>
+<p>From one of the hosts testing with a write statement to the volume:</p>
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">echo</span> <span style="color: #e6db74">&quot;testing, 1,2,3...&quot;</span> &gt;&gt; /gluster/mnt/test.txt
+</pre></div>
 
 <p>And from another host you should be able to read/write to the same document.  One could then launch containers on any host with a mount to /gluster/mnt to store data.  Then it would have access to the data no matter which node it was launched on.</p>
 

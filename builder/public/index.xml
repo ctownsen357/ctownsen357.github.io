@@ -82,15 +82,12 @@ gluster volume start media
 &lt;p&gt;The docs made a big deal out of mounting the volume.  I suspect if you were doing anything other than replicating that would become very important.&lt;/p&gt;
 
 &lt;p&gt;You&amp;rsquo;ll want to do this on each host, using its internal ip:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;mount -t glusterfs 172.30.0.186:/media /gluster/mnt
+&lt;/pre&gt;&lt;/div&gt;
 
-&lt;pre&gt;&lt;code&gt;mount -t glusterfs 172.30.0.186:/media /gluster/mnt
-```{bash}
-
-
-From one of the hosts testing with a write statement to the volume:
-```{bash}
-echo &amp;quot;testing, 1,2,3...&amp;quot; &amp;gt;&amp;gt; /gluster/mnt/test.txt
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;From one of the hosts testing with a write statement to the volume:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;testing, 1,2,3...&amp;quot;&lt;/span&gt; &amp;gt;&amp;gt; /gluster/mnt/test.txt
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;And from another host you should be able to read/write to the same document.  One could then launch containers on any host with a mount to /gluster/mnt to store data.  Then it would have access to the data no matter which node it was launched on.&lt;/p&gt;
 </description>
