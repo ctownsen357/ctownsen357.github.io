@@ -1,5 +1,5 @@
 +++
-title = "r and ff, and many columns! Oh my!"
+title = "R and ff, and many columns! Oh my!"
 Description = ""
 Tags = [
   "Development",
@@ -19,7 +19,7 @@ date = "2016-12-02T10:28:40-05:00"
 +++
 
 
-Recently I was experimenting with a data set in R that ended up being more challenging than I first expected.  It really wasn't that large as far as size on disk or memory(single instance) was concerned but it had over 3,000 columns.  
+Recently, I was experimenting with a data set in R that ended up being more challenging than I first expected.  It really wasn't that large as far as size on disk or memory(single instance) was concerned but it had over 3,000 columns.  
 
 At first I didn't think it was that big of a deal and it wouldn't be if one only needed a single instance of the ~ 750MB file in memory.  What if you have a web application that instantiates that data set on a server for each user and you have many concurrent users? All of a sudden that 750MB and any operations on that data can quickly exhaust available RAM.
 
