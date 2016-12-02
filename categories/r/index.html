@@ -156,8 +156,8 @@
 <p>I loaded the original data frame and tried to cast it to an ffdf (ff data frame):</p>
 <div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f92672">require</span><span style="color: #f8f8f2">(</span>ffbase<span style="color: #f8f8f2">)</span>
 <span style="color: #66d9ef">load</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&#39;./35509-0001-Data.rda&#39;</span><span style="color: #f8f8f2">)</span>
-ffdf35509.0001 <span style="color: #f92672">&lt;-</span> as.ffdf<span style="color: #f8f8f2">(</span>da35509.0001<span style="color: #f8f8f2">,</span> vmode <span style="color: #f92672">=</span> <span style="color: #66d9ef">NULL</span><span style="color: #f8f8f2">)</span>
-save.ffdf<span style="color: #f8f8f2">(</span>fromdf<span style="color: #f8f8f2">,</span> dir<span style="color: #f92672">=</span><span style="color: #e6db74">&quot;./testdf&quot;</span><span style="color: #f8f8f2">,</span> relative<span style="color: #f92672">=</span><span style="color: #66d9ef">TRUE</span><span style="color: #f8f8f2">)</span>
+testffdf <span style="color: #f92672">&lt;-</span> as.ffdf<span style="color: #f8f8f2">(</span>da35509.0001<span style="color: #f8f8f2">,</span> vmode <span style="color: #f92672">=</span> <span style="color: #66d9ef">NULL</span><span style="color: #f8f8f2">)</span>
+save.ffdf<span style="color: #f8f8f2">(</span>testffdf<span style="color: #f8f8f2">,</span> dir<span style="color: #f92672">=</span><span style="color: #e6db74">&quot;./testdf&quot;</span><span style="color: #f8f8f2">,</span> relative<span style="color: #f92672">=</span><span style="color: #66d9ef">TRUE</span><span style="color: #f8f8f2">)</span>
 </pre></div>
 
 <p>It failed silently.  I looked in the <code>./testdf</code> and nothing.  Ugh, what appeared so promising now looked bleak!</p>

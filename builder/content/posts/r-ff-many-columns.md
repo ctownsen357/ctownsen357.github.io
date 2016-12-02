@@ -31,8 +31,8 @@ I loaded the original data frame and tried to cast it to an ffdf (ff data frame)
 ```{r}
 require(ffbase)
 load('./35509-0001-Data.rda')
-ffdf35509.0001 <- as.ffdf(da35509.0001, vmode = NULL)
-save.ffdf(fromdf, dir="./testdf", relative=TRUE)
+testffdf <- as.ffdf(da35509.0001, vmode = NULL)
+save.ffdf(testffdf, dir="./testdf", relative=TRUE)
 ```
 
 It failed silently.  I looked in the `./testdf` and nothing.  Ugh, what appeared so promising now looked bleak!
