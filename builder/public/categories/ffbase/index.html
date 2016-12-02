@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>Ffbase &#8211; ctownsen357@github.io</title>
+<meta name="description" content="">
+
+    
+
+
+
+
+
+<meta name="twitter:title" content="Ffbase">
+<meta name="twitter:description" content="Things I&#39;ve learned.">
+
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ffbase">
+<meta property="og:description" content="Things I&#39;ve learned.">
+<meta property="og:url" content="http://ctownsen357.github.io/categories/ffbase/">
+<meta property="og:site_name" content="ctownsen357@github.io">
+
+
+
+  <meta property="og:updated_time" content="2016-12-02T10:28:40-05:00"/>
+
+
+
+
+
+
+<link rel="canonical" href="http://ctownsen357.github.io/categories/ffbase/">
+
+  <link href="http://ctownsen357.github.io/categories/ffbase/index.xml" rel="alternate" type="application/rss+xml" title="ctownsen357@github.io" />
+  <link href="http://ctownsen357.github.io/categories/ffbase/index.xml" rel="feed" type="application/rss+xml" title="ctownsen357@github.io" />
+
+
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<meta name="generator" content="Hugo 0.17" />
+
+<script src="/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+
+<link rel="shortcut icon" href="/favicon.png">
+
+
+</head>
+
+<body id="post-index" >
+<nav id="dl-menu" class="dl-menuwrapper" role="navigation">
+	<button class="dl-trigger">Open Menu</button>
+	<ul class="dl-menu">
+		<li><a href="/">Home</a></li>
+		<li>
+			<a href="#">About</a>
+			<ul class="dl-submenu">
+			
+				<li>
+					
+					<img src="/images/profile.jpg" alt="Chris Townsend's photo" class="author-photo">
+					
+					<h4>Chris Townsend</h4>
+					<p>Software engineer, always learning and improving my craft.</p>
+				</li>
+				<li><a href="/about/"><span class="btn btn-inverse">Learn More</span></a></li>
+				
+				
+				
+				
+				
+				<li>
+					<a href="https://github.com/ctownsen357"><i class="fa fa-fw fa-github"></i> GitHub</a>
+				</li>
+				
+				
+				
+				
+			
+			</ul>
+		</li>
+		<li>
+			<a href="#">Posts</a>
+			<ul class="dl-submenu">
+				<li><a href="/posts/">All Posts</a></li>
+				<li><a href="/tags/">All Tags</a></li>
+			</ul>
+		</li>
+		
+	    <li><a href="http://stackoverflow.com/users/809198/chris-townsend" target="_blank">Stack Overflow</a></li>
+	  
+	    <li><a href="https://twitter.com/FlyFishCarolina" target="_blank">Twitter</a></li>
+	  
+	</ul>
+</nav>
+
+<div class="entry-header">
+  
+  <div class="header-title">
+    <div class="header-title-wrap">
+		<h1><a href="/" title="Go to the homepage">ctownsen357@github.io</a></h1>
+	  <h2>
+            
+            
+              Ffbase
+            
+          </h2>
+    </div>
+  </div>
+</div>
+
+<div id="main" role="main">
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
+         
+		<span class="entry-date date published updated"><time datetime="2016-12-02 10:28:40 -0500 EST"><a href="/posts/r-ff-many-columns/">Dec 2, 2016</a></time></span>
+        
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        Reading time ~3 minutes
+      </span>
+    </div>
+    
+	<h1 class="entry-title"><a href="/posts/r-ff-many-columns/" rel="bookmark" title="r and ff, and many columns! Oh my!" itemprop="url">r and ff, and many columns! Oh my!</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    
+
+<p>Recently I was experimenting with a data set in R that ended up being more challenging than I first expected.  It really wasn&rsquo;t that large as far as size on disk or memory(single instance) was concerned but it had over 3,000 columns.</p>
+
+<p>At first I didn&rsquo;t think it was that big of a deal and it wouldn&rsquo;t be if one only needed a single instance of the ~ 750MB file in memory.  What if you have a web application that instantiates that data set on a server for each user and you have many concurrent users? All of a sudden that 750MB and any operations on that data can quickly exhaust available RAM.</p>
+
+<p>I looked at the bigmemory package because it looked promising and contained some tech under the hood that I&rsquo;ve used: memory mapped files and shared memory via the C++ boost libraries.  That combination allows a single instance of a matrix to be accessed by multiple processes.  The problem with that ended up being that the dat set was not a matrix of uniform type but mixed types.  Enter the ff and ffbase packages!</p>
+
+<p>The ff package provides data structures that are stored on disk but behave (almost) as if they were in RAM by transparently mapping only a section (pagesize) in main memory - the effective virtual memory consumption per ff object.</p>
+
+<p>I loaded the original data frame and tried to cast it to an ffdf (ff data frame):</p>
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f92672">require</span><span style="color: #f8f8f2">(</span>ffbase<span style="color: #f8f8f2">)</span>
+<span style="color: #66d9ef">load</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&#39;./35509-0001-Data.rda&#39;</span><span style="color: #f8f8f2">)</span>
+ffdf35509.0001 <span style="color: #f92672">&lt;-</span> as.ffdf<span style="color: #f8f8f2">(</span>da35509.0001<span style="color: #f8f8f2">,</span> vmode <span style="color: #f92672">=</span> <span style="color: #66d9ef">NULL</span><span style="color: #f8f8f2">)</span>
+save.ffdf<span style="color: #f8f8f2">(</span>fromdf<span style="color: #f8f8f2">,</span> dir<span style="color: #f92672">=</span><span style="color: #e6db74">&quot;./testdf&quot;</span><span style="color: #f8f8f2">,</span> relative<span style="color: #f92672">=</span><span style="color: #66d9ef">TRUE</span><span style="color: #f8f8f2">)</span>
+</pre></div>
+
+<p>It failed silently.  I looked in the <code>./testdf</code> and nothing.  Ugh, what appeared so promising now looked bleak!</p>
+
+<p>After some additional tinkering, I received an actual error.</p>
+
+<pre><code>Error en  ff(initdata = initdata, length = length, levels = levels, ordered = ordered,  : 
+   write error
+
+</code></pre>
+
+<p>Not very descriptive but it was something to go on.  After some searching <a href="http://stackoverflow.com/questions/14025202/ff-package-write-error">I came across this thread on stackoverflow.</a></p>
+
+<p>The answers were not entirely helpful but they did discuss that each column in an ff data frame are stored in distinct files.  Bingo! I&rsquo;ve encountered bumping into exceeding the max number of files open on a system before and it is a very simple fix.  Keep in mind the file limits are in place to prevent resource exhaustion on the system.  Those limits are set VERY conservatively though.  Increasing the limits is as simple as the following:</p>
+
+<h3 id="linux">Linux:</h3>
+
+<p>Add the following to your <code>/etc/security/limits.conf</code> file.</p>
+
+<pre><code>youruserid  hard  nofile 100000 # you may enter whatever number you wish here
+youruserid  soft  nofile  10000 # whatever you want the default to be for each shell or process you have running
+</code></pre>
+
+<h3 id="os-x">OS X:</h3>
+
+<p>Add or edit the following in your <code>/etc/sysctl.con</code> file.</p>
+
+<pre><code>kern.maxfilesperproc=166384
+kern.maxfiles=8192
+</code></pre>
+
+<p>You&rsquo;ll need to log out and log back in for the change to take effect.  After that one my use the ff data frame and the 750MB data frame with over 3,000 columns only consumes ~ 11MB of RAM per instance.  Now, many parallel instances of the R routines using this data may be run without exhausting available RAM.  Keep in mind that you&rsquo;ll want to tweak your max open file settings to account for expected concurrent use.</p>
+
+  </div>
+</article>
+
+
+
+
+
+</div>
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span> Powered by <a href="https://gohugo.io/" rel="nofollow">Hugo</a> using the <a href="https://github.com/dldx/hpstr-hugo-theme" rel="nofollow">HPSTR</a> theme.</span>
+
+  </footer>
+</div>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="\/js\/vendor\/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="/js/scripts.min.js"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-38902437-3', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+</body>
+</html>
+

@@ -6,8 +6,64 @@
     <description>Recent content in Posts-rss on ctownsen357@github.io</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
-    <lastBuildDate>Tue, 08 Nov 2016 16:28:48 -0500</lastBuildDate>
+    <lastBuildDate>Fri, 02 Dec 2016 10:28:40 -0500</lastBuildDate>
     <atom:link href="http://ctownsen357.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>r and ff, and many columns! Oh my!</title>
+      <link>http://ctownsen357.github.io/posts/r-ff-many-columns/</link>
+      <pubDate>Fri, 02 Dec 2016 10:28:40 -0500</pubDate>
+      
+      <guid>http://ctownsen357.github.io/posts/r-ff-many-columns/</guid>
+      <description>
+
+&lt;p&gt;Recently I was experimenting with a data set in R that ended up being more challenging than I first expected.  It really wasn&amp;rsquo;t that large as far as size on disk or memory(single instance) was concerned but it had over 3,000 columns.&lt;/p&gt;
+
+&lt;p&gt;At first I didn&amp;rsquo;t think it was that big of a deal and it wouldn&amp;rsquo;t be if one only needed a single instance of the ~ 750MB file in memory.  What if you have a web application that instantiates that data set on a server for each user and you have many concurrent users? All of a sudden that 750MB and any operations on that data can quickly exhaust available RAM.&lt;/p&gt;
+
+&lt;p&gt;I looked at the bigmemory package because it looked promising and contained some tech under the hood that I&amp;rsquo;ve used: memory mapped files and shared memory via the C++ boost libraries.  That combination allows a single instance of a matrix to be accessed by multiple processes.  The problem with that ended up being that the dat set was not a matrix of uniform type but mixed types.  Enter the ff and ffbase packages!&lt;/p&gt;
+
+&lt;p&gt;The ff package provides data structures that are stored on disk but behave (almost) as if they were in RAM by transparently mapping only a section (pagesize) in main memory - the effective virtual memory consumption per ff object.&lt;/p&gt;
+
+&lt;p&gt;I loaded the original data frame and tried to cast it to an ffdf (ff data frame):&lt;/p&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;require&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;ffbase&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color: #66d9ef&#34;&gt;load&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;./35509-0001-Data.rda&amp;#39;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+ffdf35509.0001 &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt; as.ffdf&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;da35509.0001&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; vmode &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;NULL&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+save.ffdf&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;fromdf&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; dir&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;./testdf&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; relative&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;TRUE&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;It failed silently.  I looked in the &lt;code&gt;./testdf&lt;/code&gt; and nothing.  Ugh, what appeared so promising now looked bleak!&lt;/p&gt;
+
+&lt;p&gt;After some additional tinkering, I received an actual error.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Error en  ff(initdata = initdata, length = length, levels = levels, ordered = ordered,  : 
+   write error
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Not very descriptive but it was something to go on.  After some searching &lt;a href=&#34;http://stackoverflow.com/questions/14025202/ff-package-write-error&#34;&gt;I came across this thread on stackoverflow.&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;The answers were not entirely helpful but they did discuss that each column in an ff data frame are stored in distinct files.  Bingo! I&amp;rsquo;ve encountered bumping into exceeding the max number of files open on a system before and it is a very simple fix.  Keep in mind the file limits are in place to prevent resource exhaustion on the system.  Those limits are set VERY conservatively though.  Increasing the limits is as simple as the following:&lt;/p&gt;
+
+&lt;h3 id=&#34;linux&#34;&gt;Linux:&lt;/h3&gt;
+
+&lt;p&gt;Add the following to your &lt;code&gt;/etc/security/limits.conf&lt;/code&gt; file.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;youruserid  hard  nofile 100000 # you may enter whatever number you wish here
+youruserid  soft  nofile  10000 # whatever you want the default to be for each shell or process you have running
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;os-x&#34;&gt;OS X:&lt;/h3&gt;
+
+&lt;p&gt;Add or edit the following in your &lt;code&gt;/etc/sysctl.con&lt;/code&gt; file.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;kern.maxfilesperproc=166384
+kern.maxfiles=8192
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You&amp;rsquo;ll need to log out and log back in for the change to take effect.  After that one my use the ff data frame and the 750MB data frame with over 3,000 columns only consumes ~ 11MB of RAM per instance.  Now, many parallel instances of the R routines using this data may be run without exhausting available RAM.  Keep in mind that you&amp;rsquo;ll want to tweak your max open file settings to account for expected concurrent use.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>GlusterFS &amp; Docker</title>
@@ -498,142 +554,6 @@ sudo mount.cifs &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;//1.1.1.1/n
 &lt;p&gt;Occupy et selvage squid, pug brunch blog nesciunt hashtag mumblecore skateboard yr kogi. Ugh small batch swag four loko. Fap post-ironic qui tote bag farm-to-table american apparel scenester keffiyeh vero, swag non pour-over gentrify authentic pitchfork. Schlitz scenester lo-fi voluptate, tote bag irony bicycle rights pariatur vero Vice freegan wayfarers exercitation nisi shoreditch. Chambray tofu vero sed. Street art swag literally leggings, Cosby sweater mixtape PBR lomo Banksy non in pitchfork ennui McSweeney&amp;rsquo;s selfies. Odd Future Banksy non authentic.&lt;/p&gt;
 
 &lt;p&gt;Aliquip enim artisan dolor post-ironic. Pug tote bag Marfa, deserunt pour-over Portland wolf eu odio intelligentsia american apparel ugh ea. Sunt viral et, 3 wolf moon gastropub pug id. Id fashion axe est typewriter, mlkshk Portland art party aute brunch. Sint pork belly Cosby sweater, deep v mumblecore kitsch american apparel. Try-hard direct trade tumblr sint skateboard. Adipisicing bitters excepteur biodiesel, pickled gastropub aute veniam.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Sample Post</title>
-      <link>http://ctownsen357.github.io/posts/sample-post/</link>
-      <pubDate>Thu, 10 Mar 2011 00:00:00 +0000</pubDate>
-      
-      <guid>http://ctownsen357.github.io/posts/sample-post/</guid>
-      <description>
-
-&lt;p&gt;Below is just about everything you&amp;rsquo;ll need to style in the theme. Check the source code to see the many embedded elements within paragraphs.&lt;/p&gt;
-
-&lt;h1 id=&#34;heading-1&#34;&gt;Heading 1&lt;/h1&gt;
-
-&lt;h2 id=&#34;heading-2&#34;&gt;Heading 2&lt;/h2&gt;
-
-&lt;h3 id=&#34;heading-3&#34;&gt;Heading 3&lt;/h3&gt;
-
-&lt;h4 id=&#34;heading-4&#34;&gt;Heading 4&lt;/h4&gt;
-
-&lt;h5 id=&#34;heading-5&#34;&gt;Heading 5&lt;/h5&gt;
-
-&lt;h6 id=&#34;heading-6&#34;&gt;Heading 6&lt;/h6&gt;
-
-&lt;h3 id=&#34;body-text&#34;&gt;Body text&lt;/h3&gt;
-
-&lt;p&gt;Lorem ipsum dolor sit amet, test link adipiscing elit. &lt;strong&gt;This is strong&lt;/strong&gt;. Nullam dignissim convallis est. Quisque aliquam.&lt;/p&gt;
-
-&lt;p&gt;&lt;img alt=&#34;Smithsonian Image&#34; src=&#34;http://ctownsen357.github.io/images/3953273590_704e3899d5_m.jpg&#34; style=&#34;float: right;&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;This is emphasized&lt;/em&gt;. Donec faucibus. Nunc iaculis suscipit dui. 53 = 125. Water is H&lt;sub&gt;2&lt;/sub&gt;O. Nam sit amet sem. Aliquam libero nisi, imperdiet at, tincidunt nec, gravida vehicula, nisl. The New York Times &lt;cite&gt;(That’s a citation)&lt;/cite&gt;. &lt;u&gt;Underline&lt;/u&gt;. Maecenas ornare tortor. Donec sed tellus eget sapien fringilla nonummy. Mauris a ante. Suspendisse quam sem, consequat at, commodo vitae, feugiat in, nunc. Morbi imperdiet augue quis tellus.&lt;/p&gt;
-
-&lt;p&gt;HTML and &lt;abbr title=&#34;cascading stylesheets&#34;&gt;CSS&lt;abbr&gt; are our tools. Mauris a ante. Suspendisse quam sem, consequat at, commodo vitae, feugiat in, nunc. Morbi imperdiet augue quis tellus. Praesent mattis, massa quis luctus fermentum, turpis mi volutpat justo, eu volutpat enim diam eget metus.&lt;/p&gt;
-
-&lt;h3 id=&#34;blockquotes&#34;&gt;Blockquotes&lt;/h3&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Lorem ipsum dolor sit amet, test link adipiscing elit. Nullam dignissim convallis est. Quisque aliquam.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h2 id=&#34;list-types&#34;&gt;List Types&lt;/h2&gt;
-
-&lt;h3 id=&#34;ordered-lists&#34;&gt;Ordered Lists&lt;/h3&gt;
-
-&lt;ol&gt;
-&lt;li&gt;Item one
-
-&lt;ol&gt;
-&lt;li&gt;sub item one&lt;/li&gt;
-&lt;li&gt;sub item two&lt;/li&gt;
-&lt;li&gt;sub item three&lt;/li&gt;
-&lt;/ol&gt;&lt;/li&gt;
-&lt;li&gt;Item two&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&#34;unordered-lists&#34;&gt;Unordered Lists&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Item one&lt;/li&gt;
-&lt;li&gt;Item two&lt;/li&gt;
-&lt;li&gt;Item three&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;tables&#34;&gt;Tables&lt;/h2&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th align=&#34;left&#34;&gt;Header1&lt;/th&gt;
-&lt;th align=&#34;center&#34;&gt;Header2&lt;/th&gt;
-&lt;th align=&#34;right&#34;&gt;Header3&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;cell1&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;cell2&lt;/td&gt;
-&lt;td align=&#34;right&#34;&gt;cell3&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;cell4&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;cell5&lt;/td&gt;
-&lt;td align=&#34;right&#34;&gt;cell6&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;cell1&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;cell2&lt;/td&gt;
-&lt;td align=&#34;right&#34;&gt;cell3&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;cell4&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;cell5&lt;/td&gt;
-&lt;td align=&#34;right&#34;&gt;cell6&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;Foot1&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;Foot2&lt;/td&gt;
-&lt;td align=&#34;right&#34;&gt;Foot3&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;h2 id=&#34;code-snippets&#34;&gt;Code Snippets&lt;/h2&gt;
-
-&lt;p&gt;Syntax highlighting via Rouge&lt;/p&gt;
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;#container&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;{&lt;/span&gt;
-  &lt;span style=&#34;color: #f8f8f2&#34;&gt;float&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #f8f8f2&#34;&gt;left;&lt;/span&gt;
-  &lt;span style=&#34;color: #f8f8f2&#34;&gt;margin&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;-240px&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
-  &lt;span style=&#34;color: #f8f8f2&#34;&gt;width&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color: #ae81ff&#34;&gt;100%&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;;&lt;/span&gt;
-&lt;span style=&#34;color: #f8f8f2&#34;&gt;}&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Non Pygments code example&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;div id=&amp;quot;awesome&amp;quot;&amp;gt;
-    &amp;lt;p&amp;gt;This is great isn&#39;t it?&amp;lt;/p&amp;gt;
-&amp;lt;/div&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;buttons&#34;&gt;Buttons&lt;/h2&gt;
-
-&lt;p&gt;Make any link standout more when applying the &lt;code&gt;.btn&lt;/code&gt; class.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;href&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;#&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #a6e22e&#34;&gt;class&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;btn btn-success&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;Success Button&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;lt;/&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;a&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;&amp;gt;&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-&lt;div markdown=&#34;0&#34;&gt;&lt;a href=&#34;#&#34; class=&#34;btn&#34;&gt;Primary Button&lt;/a&gt;&lt;/div&gt;
-&lt;div markdown=&#34;0&#34;&gt;&lt;a href=&#34;#&#34; class=&#34;btn btn-success&#34;&gt;Success Button&lt;/a&gt;&lt;/div&gt;
-&lt;div markdown=&#34;0&#34;&gt;&lt;a href=&#34;#&#34; class=&#34;btn btn-warning&#34;&gt;Warning Button&lt;/a&gt;&lt;/div&gt;
-&lt;div markdown=&#34;0&#34;&gt;&lt;a href=&#34;#&#34; class=&#34;btn btn-danger&#34;&gt;Danger Button&lt;/a&gt;&lt;/div&gt;
-&lt;div markdown=&#34;0&#34;&gt;&lt;a href=&#34;#&#34; class=&#34;btn btn-info&#34;&gt;Info Button&lt;/a&gt;&lt;/div&gt;
 </description>
     </item>
     
