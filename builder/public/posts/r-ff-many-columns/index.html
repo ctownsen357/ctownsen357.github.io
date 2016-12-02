@@ -171,7 +171,16 @@ youruserid  soft  nofile  10000 # whatever you want the default to be for each s
 kern.maxfiles=8192
 </code></pre>
 
-<p>You&rsquo;ll need to log out and log back in for the change to take effect.  After that change, one may use the ff data frame with up to the number of columns you specified in your <code>limits.conf</code> or <code>sysctl.con</code> file.  Now I&rsquo;m able to load  what was 750MB per data frame instance as a ffdf and only consume ~ 11MB of RAM per instance.  Many parallel instances of the R routines using this data may be run without exhausting available RAM.  Keep in mind that you&rsquo;ll want to tweak your max open file settings to account for expected concurrent use.</p>
+<p>You&rsquo;ll need to log out and log back in for the change to take effect.  After that change, one may use the ff data frame with up to the number of columns you specified in your <code>limits.conf</code> or <code>sysctl.con</code> file.</p>
+
+<p>Now I&rsquo;m able to load  what was 750MB per data frame instance as a ffdf and only consume ~ 11MB of RAM per instance.  Many parallel instances of the R routines using this data may be run without exhausting available RAM.  Keep in mind that you&rsquo;ll want to tweak your max open file settings to account for expected concurrent use.</p>
+
+<p>You can test this by opening up a new R session, changing directories to where you were working previously and loading the ffdf from disk:</p>
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>required<span style="color: #f8f8f2">(</span>ffbase<span style="color: #f8f8f2">)</span>
+load.ffdf<span style="color: #f8f8f2">(</span><span style="color: #e6db74">&#39;./testdf&#39;</span><span style="color: #f8f8f2">)</span>
+</pre></div>
+
+<p>Your should now have an instance of the original testffdf object.</p>
 
 <p>A helpful presentation on the ff and ffbase packages is <a href="http://ff.r-forge.r-project.org/ff&amp;bit_UseR!2009.pdf">available here</a>.</p>
 

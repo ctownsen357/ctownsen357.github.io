@@ -63,13 +63,16 @@ kern.maxfilesperproc=166384
 kern.maxfiles=8192
 ```
 
-You'll need to log out and log back in for the change to take effect.  After that change, one may use the ff data frame with up to the number of columns you specified in your `limits.conf` or `sysctl.con` file.  Now I'm able to load  what was 750MB per data frame instance as a ffdf and only consume ~ 11MB of RAM per instance.  Many parallel instances of the R routines using this data may be run without exhausting available RAM.  Keep in mind that you'll want to tweak your max open file settings to account for expected concurrent use.
+You'll need to log out and log back in for the change to take effect.  After that change, one may use the ff data frame with up to the number of columns you specified in your `limits.conf` or `sysctl.con` file.  
+
+Now I'm able to load  what was 750MB per data frame instance as a ffdf and only consume ~ 11MB of RAM per instance.  Many parallel instances of the R routines using this data may be run without exhausting available RAM.  Keep in mind that you'll want to tweak your max open file settings to account for expected concurrent use.
+
+You can test this by opening up a new R session, changing directories to where you were working previously and loading the ffdf from disk:
+```{R}
+required(ffbase)
+load.ffdf('./testdf')
+```
+Your should now have an instance of the original testffdf object.
 
 A helpful presentation on the ff and ffbase packages is [available here](http://ff.r-forge.r-project.org/ff&bit_UseR!2009.pdf).
-
-
-
-
-
-
 
