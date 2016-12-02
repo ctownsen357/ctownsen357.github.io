@@ -63,7 +63,9 @@ kern.maxfilesperproc=166384
 kern.maxfiles=8192
 ```
 
-You'll need to log out and log back in for the change to take effect.  After that one my use the ff data frame and the 750MB data frame with over 3,000 columns only consumes ~ 11MB of RAM per instance.  Now, many parallel instances of the R routines using this data may be run without exhausting available RAM.  Keep in mind that you'll want to tweak your max open file settings to account for expected concurrent use.
+You'll need to log out and log back in for the change to take effect.  After that change, one may use the ff data frame with up to the number of columns you specified in your `limits.conf` or `sysctl.con` file.  Now I'm able to load  what was 750MB per data frame instance as a ffdf and only consume ~ 11MB of RAM per instance.  Many parallel instances of the R routines using this data may be run without exhausting available RAM.  Keep in mind that you'll want to tweak your max open file settings to account for expected concurrent use.
+
+A helpful presentation on the ff and ffbase packages is [available here](http://ff.r-forge.r-project.org/ff&bit_UseR!2009.pdf).
 
 
 
