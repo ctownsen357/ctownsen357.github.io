@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>Compiled R &#8211; ctownsen357@github.io</title>
+<meta name="description" content="Increasing the performance of R by compiling to bytecode.">
+
+    
+
+<meta name="keywords" content="Development, R">
+
+
+
+<meta name="twitter:title" content="Compiled R">
+<meta name="twitter:description" content="Increasing the performance of R by compiling to bytecode.">
+
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Compiled R">
+<meta property="og:description" content="Increasing the performance of R by compiling to bytecode.">
+<meta property="og:url" content="http://ctownsen357.github.io/posts/compiled-r/">
+<meta property="og:site_name" content="ctownsen357@github.io">
+
+
+
+  <meta property="og:updated_time" content="2017-01-08T17:08:34-05:00"/>
+
+
+
+
+
+
+<link rel="canonical" href="http://ctownsen357.github.io/posts/compiled-r/">
+
+
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<meta name="generator" content="Hugo 0.18.1" />
+
+<script src="/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+
+<link rel="shortcut icon" href="/favicon.png">
+
+
+</head>
+
+<body id="post" >
+<nav id="dl-menu" class="dl-menuwrapper" role="navigation">
+	<button class="dl-trigger">Open Menu</button>
+	<ul class="dl-menu">
+		<li><a href="/">Home</a></li>
+		<li>
+			<a href="#">About</a>
+			<ul class="dl-submenu">
+			
+				<li>
+					
+					<img src="/images/profile.jpg" alt="Chris Townsend's photo" class="author-photo">
+					
+					<h4>Chris Townsend</h4>
+					<p>Software engineer, always learning and improving my craft.</p>
+				</li>
+				<li><a href="/about/"><span class="btn btn-inverse">Learn More</span></a></li>
+				
+				
+				
+				
+				
+				<li>
+					<a href="https://github.com/ctownsen357"><i class="fa fa-fw fa-github"></i> GitHub</a>
+				</li>
+				
+				
+				
+				
+			
+			</ul>
+		</li>
+		<li>
+			<a href="#">Posts</a>
+			<ul class="dl-submenu">
+				<li><a href="/posts/">All Posts</a></li>
+				<li><a href="/tags/">All Tags</a></li>
+			</ul>
+		</li>
+		
+	    <li><a href="http://stackoverflow.com/users/809198/chris-townsend" target="_blank">Stack Overflow</a></li>
+	  
+	    <li><a href="https://twitter.com/FlyFishCarolina" target="_blank">Twitter</a></li>
+	  
+	</ul>
+</nav>
+
+ 
+
+<div id="main" role="main">
+  <article class="hentry">
+    <header class="header-title">
+      <div class="header-title-wrap">
+        
+          <h1 class="entry-title"><a href="/posts/compiled-r/" rel="bookmark" title="Compiled R">Compiled R</a></h1>
+        
+         
+        <h2><span class="entry-date date published"><time datetime="2017-01-08 17:08:34 -0500 EST">January 8, 2017</time></span></h2>
+        
+      <p class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        Reading time ~2 minutes
+    </p>
+      </div>
+    </header>
+    <div class="entry-content">
+      
+
+<p>While investigating ways to make some R code more performant I came across the compiler package.  This package allows one to compile functions and/or entire files into compiled bytecode.  Alternatively one may also enable just-in-time compilation.  In my use case with Rserve the JIT compilation options actually made performance worse because each session was recompiling everything rather than sharing compiled source.  In my case the way forward was to compile the files into bytecode so they were precompiled manually and available as bytecode files.</p>
+
+<h2 id="just-in-time-compile">Just-in-time Compile</h2>
+
+<pre><code>library(compiler)
+enableJIT(3)
+</code></pre>
+
+<p>The options for JIT are 0 through 3, inicating no JIT through the max level where everything possible is compiled before first use.</p>
+
+<h2 id="compiling-functions">Compiling functions</h2>
+library(compiler)
+myfoo <- function(){
+    seq(1:5)
+}
+
+compiledfoo <- cmpfun(myfoo)
+
+<p>That example is not going to yield any performance benefit because seq is already compiled but it demonstrates HOW to compile a function.  My experience was that it is about 2-3 times faster and is most helpful for a function that gets called multiple times.</p>
+
+<h2 id="compiling-an-entire-r-file">Compiling an entire R file</h2>
+library(compiler)
+cmpfile(infile='<path_to_file>.R')
+
+<p>This will compile the entire R file down to bytecode in the same location with an extension of .Rc  This compiled file may then be sourced in other R files and the performance benefits I saw were highly dependent on the types of routines being called.</p>
+
+<h2 id="sourcing-your-newly-compiled-r-file">Sourcing your newly compiled R file</h2>
+library(compiler)
+
+loadcmp('<path/to/compiled/file>.Rc')
+# call all of your functions as you normally would
+
+      <footer class="entry-meta">
+          
+        <span class="entry-tags"><a href="/tags/#development" title="Pages tagged development" class="tag"><span class="term">development</span></a><a href="/tags/#r" title="Pages tagged r" class="tag"><span class="term">r</span></a></span>
+        
+        
+        <div class="social-share">
+  <ul class="socialcount socialcount-small inline-list">
+    <li class="facebook"><a href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fctownsen357.github.io%2fposts%2fcompiled-r%2f" target="_blank" title="Share on Facebook"><span class="count"><i class="fa fa-facebook-square"></i> Like</span></a></li>
+    <li class="twitter"><a href="https://twitter.com/intent/tweet?text=http%3a%2f%2fctownsen357.github.io%2fposts%2fcompiled-r%2f" target="_blank" title="Share on Twitter"><span class="count"><i class="fa fa-twitter-square"></i> Tweet</span></a></li>
+    <li class="googleplus"><a href="https://plus.google.com/share?url=http%3a%2f%2fctownsen357.github.io%2fposts%2fcompiled-r%2f" target="_blank" title="Share on Google Plus"><span class="count"><i class="fa fa-google-plus-square"></i> +1</span></a></li>
+  </ul>
+</div>
+
+      </footer>
+    </div>
+    
+    <section id="disqus_thread"><div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'ctownsen357';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+    
+  </article>
+</div>
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span> Powered by <a href="https://gohugo.io/" rel="nofollow">Hugo</a> using the <a href="https://github.com/dldx/hpstr-hugo-theme" rel="nofollow">HPSTR</a> theme.</span>
+
+  </footer>
+</div>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="\/js\/vendor\/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="/js/scripts.min.js"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-38902437-3', 'auto');
+ga('send', 'pageview');
+</script>
+
+
+
+</body>
+</html>
+

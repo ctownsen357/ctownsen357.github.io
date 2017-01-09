@@ -52,7 +52,7 @@
 
 <meta http-equiv="cleartype" content="on">
 
-<meta name="generator" content="Hugo 0.17" />
+<meta name="generator" content="Hugo 0.18.1" />
 
 <script src="/js/vendor/modernizr-2.6.2.custom.min.js"></script>
 
@@ -144,8 +144,7 @@
   </header>
   <div class="entry-content">
     <p>This forces a manual update if one is available:</p>
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>update_engine_client -update
-</pre></div>
+update_engine_client -update
 
   </div>
 </article>
@@ -172,18 +171,17 @@
 <p><strong>Note:</strong> I map /opt/bin from the host to a folder in the container.  I store custom binaries and scripts in /opt/bin on CoreOS as it is in the path and persists even after CoreOS updates to the latest version.  I&rsquo;ve also changed the example from a Fedora container to CentOS as CentOS already has items installed that the example I link to installed in addition to the dev tools and libraries.</p>
 
 <p>This is how I got around that problem:</p>
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>docker run -t -i -v /opt/bin:/host_tmp centos /bin/bash
-yum groupinstall -y <span style="color: #e6db74">&quot;Development Tools&quot;</span> <span style="color: #e6db74">&quot;Development Libraries&quot;</span>
+docker run -t -i -v /opt/bin:/host_tmp centos /bin/bash
+yum groupinstall -y "Development Tools" "Development Libraries"
 
-curl https://download.samba.org/pub/linux-cifs/cifs-utils/cifs-utils-6.3.tar.bz2 <span style="color: #f8f8f2">|</span> bunzip2 -c - <span style="color: #f8f8f2">|</span> tar -xvf -
-<span style="color: #f8f8f2">cd</span> cifs-utils-6.3/
-./configure <span style="color: #f92672">&amp;&amp;</span> make
+curl https://download.samba.org/pub/linux-cifs/cifs-utils/cifs-utils-6.3.tar.bz2 | bunzip2 -c - | tar -xvf -
+cd cifs-utils-6.3/
+./configure && make
 cp mount.cifs /host_tmp/
-<span style="color: #f8f8f2">exit</span>
+exit
 
 sudo mkdir /media/foo
-sudo mount.cifs <span style="color: #e6db74">&quot;//1.1.1.1/ntfs_share&quot;</span> -o <span style="color: #f8f8f2">username</span><span style="color: #f92672">=</span>winuser,domain<span style="color: #f92672">=</span>mydomain.com,rw,dir_mode<span style="color: #f92672">=</span>0775,noperm /media/foo/ 
-</pre></div>
+sudo mount.cifs "//1.1.1.1/ntfs_share" -o username=winuser,domain=mydomain.com,rw,dir_mode=0775,noperm /media/foo/ 
 
 <p>Originally <a href="https://gist.github.com/pantelis/540a19262cacc841fb0a">found here</a>.</p>
 

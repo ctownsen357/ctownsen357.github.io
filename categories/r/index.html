@@ -28,7 +28,7 @@
 
 
 
-  <meta property="og:updated_time" content="2016-12-02T10:28:40-05:00"/>
+  <meta property="og:updated_time" content="2017-01-08T17:08:34-05:00"/>
 
 
 
@@ -52,7 +52,7 @@
 
 <meta http-equiv="cleartype" content="on">
 
-<meta name="generator" content="Hugo 0.17" />
+<meta name="generator" content="Hugo 0.18.1" />
 
 <script src="/js/vendor/modernizr-2.6.2.custom.min.js"></script>
 
@@ -131,6 +131,60 @@
     
     <div class="entry-meta">
          
+		<span class="entry-date date published updated"><time datetime="2017-01-08 17:08:34 -0500 EST"><a href="/posts/compiled-r/">Jan 8, 2017</a></time></span>
+        
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        Reading time ~2 minutes
+      </span>
+    </div>
+    
+	<h1 class="entry-title"><a href="/posts/compiled-r/" rel="bookmark" title="Compiled R" itemprop="url">Compiled R</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    
+
+<p>While investigating ways to make some R code more performant I came across the compiler package.  This package allows one to compile functions and/or entire files into compiled bytecode.  Alternatively one may also enable just-in-time compilation.  In my use case with Rserve the JIT compilation options actually made performance worse because each session was recompiling everything rather than sharing compiled source.  In my case the way forward was to compile the files into bytecode so they were precompiled manually and available as bytecode files.</p>
+
+<h2 id="just-in-time-compile">Just-in-time Compile</h2>
+
+<pre><code>library(compiler)
+enableJIT(3)
+</code></pre>
+
+<p>The options for JIT are 0 through 3, inicating no JIT through the max level where everything possible is compiled before first use.</p>
+
+<h2 id="compiling-functions">Compiling functions</h2>
+library(compiler)
+myfoo <- function(){
+    seq(1:5)
+}
+
+compiledfoo <- cmpfun(myfoo)
+
+<p>That example is not going to yield any performance benefit because seq is already compiled but it demonstrates HOW to compile a function.  My experience was that it is about 2-3 times faster and is most helpful for a function that gets called multiple times.</p>
+
+<h2 id="compiling-an-entire-r-file">Compiling an entire R file</h2>
+library(compiler)
+cmpfile(infile='<path_to_file>.R')
+
+<p>This will compile the entire R file down to bytecode in the same location with an extension of .Rc  This compiled file may then be sourced in other R files and the performance benefits I saw were highly dependent on the types of routines being called.</p>
+
+<h2 id="sourcing-your-newly-compiled-r-file">Sourcing your newly compiled R file</h2>
+library(compiler)
+
+loadcmp('<path/to/compiled/file>.Rc')
+# call all of your functions as you normally would
+
+  </div>
+</article>
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
+         
 		<span class="entry-date date published updated"><time datetime="2016-12-02 10:28:40 -0500 EST"><a href="/posts/r-ff-many-columns/">Dec 2, 2016</a></time></span>
         
       <span class="entry-reading-time">
@@ -154,11 +208,10 @@
 <p>The ff package provides data structures that are stored on disk but behave (almost) as if they were in RAM by transparently mapping only a section (pagesize) in main memory - the effective virtual memory consumption per ff object.</p>
 
 <p>I loaded the original data frame and tried to cast it to an ffdf (ff data frame):</p>
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f92672">require</span><span style="color: #f8f8f2">(</span>ffbase<span style="color: #f8f8f2">)</span>
-<span style="color: #66d9ef">load</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&#39;./35509-0001-Data.rda&#39;</span><span style="color: #f8f8f2">)</span>
-testffdf <span style="color: #f92672">&lt;-</span> as.ffdf<span style="color: #f8f8f2">(</span>da35509.0001<span style="color: #f8f8f2">,</span> vmode <span style="color: #f92672">=</span> <span style="color: #66d9ef">NULL</span><span style="color: #f8f8f2">)</span>
-save.ffdf<span style="color: #f8f8f2">(</span>testffdf<span style="color: #f8f8f2">,</span> dir<span style="color: #f92672">=</span><span style="color: #e6db74">&quot;./testdf&quot;</span><span style="color: #f8f8f2">,</span> relative<span style="color: #f92672">=</span><span style="color: #66d9ef">TRUE</span><span style="color: #f8f8f2">)</span>
-</pre></div>
+require(ffbase)
+load('./35509-0001-Data.rda')
+testffdf <- as.ffdf(da35509.0001, vmode = NULL)
+save.ffdf(testffdf, dir="./testdf", relative=TRUE)
 
 <p>It failed silently.  I looked in the <code>./testdf</code> and nothing.  Ugh, what appeared so promising now looked bleak!</p>
 
@@ -194,9 +247,8 @@ kern.maxfiles=8192
 <p>Now I&rsquo;m able to load  what was 750MB per data frame instance as a ffdf and only consume ~ 11MB of RAM per instance.  Many parallel instances of the R routines using this data may be run without exhausting available RAM.  Keep in mind that you&rsquo;ll want to tweak your max open file settings to account for expected concurrent use.</p>
 
 <p>You can test this by opening up a new R session, changing directories to where you were working previously and loading the ffdf from disk:</p>
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>required<span style="color: #f8f8f2">(</span>ffbase<span style="color: #f8f8f2">)</span>
-load.ffdf<span style="color: #f8f8f2">(</span><span style="color: #e6db74">&#39;./testdf&#39;</span><span style="color: #f8f8f2">)</span>
-</pre></div>
+required(ffbase)
+load.ffdf('./testdf')
 
 <p>Your should now have an instance of the original testffdf object.</p>
 

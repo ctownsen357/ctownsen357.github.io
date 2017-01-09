@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>ctownsen357@github.io</title>
+    <title>Ff on ctownsen357@github.io</title>
     <link>http://ctownsen357.github.io/categories/ff/index.xml</link>
-    <description>Recent content on ctownsen357@github.io</description>
+    <description>Recent content in Ff on ctownsen357@github.io</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
     <atom:link href="http://ctownsen357.github.io/categories/ff/index.xml" rel="self" type="application/rss+xml" />
@@ -25,11 +25,10 @@
 &lt;p&gt;The ff package provides data structures that are stored on disk but behave (almost) as if they were in RAM by transparently mapping only a section (pagesize) in main memory - the effective virtual memory consumption per ff object.&lt;/p&gt;
 
 &lt;p&gt;I loaded the original data frame and tried to cast it to an ffdf (ff data frame):&lt;/p&gt;
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;require&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;ffbase&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
-&lt;span style=&#34;color: #66d9ef&#34;&gt;load&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;./35509-0001-Data.rda&amp;#39;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
-testffdf &lt;span style=&#34;color: #f92672&#34;&gt;&amp;lt;-&lt;/span&gt; as.ffdf&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;da35509.0001&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; vmode &lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #66d9ef&#34;&gt;NULL&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
-save.ffdf&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;testffdf&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; dir&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;./testdf&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;,&lt;/span&gt; relative&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color: #66d9ef&#34;&gt;TRUE&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
+require(ffbase)
+load(&#39;./35509-0001-Data.rda&#39;)
+testffdf &lt;- as.ffdf(da35509.0001, vmode = NULL)
+save.ffdf(testffdf, dir=&#34;./testdf&#34;, relative=TRUE)
 
 &lt;p&gt;It failed silently.  I looked in the &lt;code&gt;./testdf&lt;/code&gt; and nothing.  Ugh, what appeared so promising now looked bleak!&lt;/p&gt;
 
@@ -65,9 +64,8 @@ kern.maxfiles=8192
 &lt;p&gt;Now I&amp;rsquo;m able to load  what was 750MB per data frame instance as a ffdf and only consume ~ 11MB of RAM per instance.  Many parallel instances of the R routines using this data may be run without exhausting available RAM.  Keep in mind that you&amp;rsquo;ll want to tweak your max open file settings to account for expected concurrent use.&lt;/p&gt;
 
 &lt;p&gt;You can test this by opening up a new R session, changing directories to where you were working previously and loading the ffdf from disk:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;required&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;ffbase&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
-load.ffdf&lt;span style=&#34;color: #f8f8f2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;./testdf&amp;#39;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;)&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
+required(ffbase)
+load.ffdf(&#39;./testdf&#39;)
 
 &lt;p&gt;Your should now have an instance of the original testffdf object.&lt;/p&gt;
 

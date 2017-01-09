@@ -37,7 +37,7 @@
     <meta property="og:image" content="http://ctownsen357.github.io/images/simmons-map.jpg" />
 
 
-  <meta property="og:updated_time" content="2013-08-16T00:00:00&#43;00:00"/>
+  <meta property="og:updated_time" content="2013-10-26T00:00:00&#43;00:00"/>
 
 
 
@@ -61,7 +61,7 @@
 
 <meta http-equiv="cleartype" content="on">
 
-<meta name="generator" content="Hugo 0.17" />
+<meta name="generator" content="Hugo 0.18.1" />
 
 <script src="/js/vendor/modernizr-2.6.2.custom.min.js"></script>
 
@@ -141,6 +141,35 @@
 <article class="hentry">
   <header>
     
+    <div class="entry-meta">
+         
+		<span class="entry-date date published updated"><time datetime="2013-10-26 00:00:00 &#43;0000 UTC"><a href="/posts/background-image/">Oct 26, 2013</a></time></span>
+        
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        Reading time ~1 minute
+      </span>
+    </div>
+    
+	<h1 class="entry-title"><a href="/posts/background-image/" rel="bookmark" title="Post with a Background Image" itemprop="url">Post with a Background Image</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <p>Here be a sample post with a custom background image. To utilize this &ldquo;feature&rdquo; just add the following YAML to a post&rsquo;s front matter.</p>
+background: /images/filename.png
+
+<p>This little bit of YAML makes the assumption that your background image asset is in the <code>/images</code> folder. If you place it somewhere else or are hotlinking from the web, just include the full http(s):// URL. Either way you should have a background image that is tiled.</p>
+
+<p>If you want to set a background image for the entire site just add <code>background: /images/filename.png</code> as a <a href="https://gohugo.io/overview/configuration/#examples">param</a> in your config and BOOM &mdash; background images on every page!</p>
+
+<div xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/" about="http://subtlepatterns.com" class="notice">Background images from <span property="dct:title">Subtle Patterns</span> (<a rel="cc:attributionURL" property="cc:attributionName" href="http://subtlepatterns.com">Subtle Patterns</a>) / <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a></div>
+
+  </div>
+</article>
+
+<article class="hentry">
+  <header>
+    
       <div class="entry-image-index">
 		  <a href="/posts/code-highlighting-post/" title="Syntax Highlighting Post"><img src="/images/abstract-10.jpg" alt="Syntax Highlighting Post"></a>
       </div>
@@ -151,7 +180,7 @@
         
       <span class="entry-reading-time">
         <i class="fa fa-clock-o"></i>
-        Reading time ~2 minutes
+        Reading time ~1 minute
       </span>
     </div>
     
@@ -166,39 +195,36 @@
 <h3 id="highlighted-code-blocks">Highlighted Code Blocks</h3>
 
 <p>To modify styling and highlight colors edit <code>/static/css/_sass/_syntax.scss</code>.</p>
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">#container</span> <span style="color: #f8f8f2">{</span>
-    <span style="color: #f8f8f2">float</span><span style="color: #f92672">:</span> <span style="color: #f8f8f2">left;</span>
-    <span style="color: #f8f8f2">margin</span><span style="color: #f92672">:</span> <span style="color: #ae81ff">0</span> <span style="color: #ae81ff">-240px</span> <span style="color: #ae81ff">0</span> <span style="color: #ae81ff">0</span><span style="color: #f8f8f2">;</span>
-    <span style="color: #f8f8f2">width</span><span style="color: #f92672">:</span> <span style="color: #ae81ff">100%</span><span style="color: #f8f8f2">;</span>
-<span style="color: #f8f8f2">}</span>
-</pre></div>
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">&lt;</span><span style="color: #f92672">nav</span> <span style="color: #a6e22e">class</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;pagination&quot;</span> <span style="color: #a6e22e">role</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;navigation&quot;</span><span style="color: #f8f8f2">&gt;</span>
+#container {
+    float: left;
+    margin: 0 -240px 0 0;
+    width: 100%;
+}
+<nav class="pagination" role="navigation">
     {% if page.previous %}
-        <span style="color: #f8f8f2">&lt;</span><span style="color: #f92672">a</span> <span style="color: #a6e22e">href</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;{{ site.url }}{{ page.previous.url }}&quot;</span> <span style="color: #a6e22e">class</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;btn&quot;</span> <span style="color: #a6e22e">title</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;{{ page.previous.title }}&quot;</span><span style="color: #f8f8f2">&gt;</span>Previous article<span style="color: #f8f8f2">&lt;/</span><span style="color: #f92672">a</span><span style="color: #f8f8f2">&gt;</span>
+        <a href="{{ site.url }}{{ page.previous.url }}" class="btn" title="{{ page.previous.title }}">Previous article</a>
     {% endif %}
     {% if page.next %}
-        <span style="color: #f8f8f2">&lt;</span><span style="color: #f92672">a</span> <span style="color: #a6e22e">href</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;{{ site.url }}{{ page.next.url }}&quot;</span> <span style="color: #a6e22e">class</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;btn&quot;</span> <span style="color: #a6e22e">title</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;{{ page.next.title }}&quot;</span><span style="color: #f8f8f2">&gt;</span>Next article<span style="color: #f8f8f2">&lt;/</span><span style="color: #f92672">a</span><span style="color: #f8f8f2">&gt;</span>
+        <a href="{{ site.url }}{{ page.next.url }}" class="btn" title="{{ page.next.title }}">Next article</a>
     {% endif %}
-<span style="color: #f8f8f2">&lt;/</span><span style="color: #f92672">nav</span><span style="color: #f8f8f2">&gt;</span><span style="color: #75715e">&lt;!-- /.pagination --&gt;</span>
-</pre></div>
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">module</span> <span style="color: #f8f8f2">Jekyll</span>
-  <span style="color: #66d9ef">class</span> <span style="color: #a6e22e">TagIndex</span> <span style="color: #f92672">&lt;</span> <span style="color: #66d9ef">Page</span>
-    <span style="color: #66d9ef">def</span> <span style="color: #a6e22e">initialize</span><span style="color: #f8f8f2">(site,</span> <span style="color: #f8f8f2">base,</span> <span style="color: #f8f8f2">dir,</span> <span style="color: #f8f8f2">tag)</span>
-      <span style="color: #f8f8f2">@site</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">site</span>
-      <span style="color: #f8f8f2">@base</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">base</span>
-      <span style="color: #f8f8f2">@dir</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">dir</span>
-      <span style="color: #f8f8f2">@name</span> <span style="color: #f92672">=</span> <span style="color: #e6db74">&#39;index.html&#39;</span>
-      <span style="color: #f8f8f2">self</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">process(@name)</span>
-      <span style="color: #f8f8f2">self</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">read_yaml(</span><span style="color: #66d9ef">File</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">join(base,</span> <span style="color: #e6db74">&#39;_layouts&#39;</span><span style="color: #f8f8f2">),</span> <span style="color: #e6db74">&#39;tag_index.html&#39;</span><span style="color: #f8f8f2">)</span>
-      <span style="color: #f8f8f2">self</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">data</span><span style="color: #f92672">[</span><span style="color: #e6db74">&#39;tag&#39;</span><span style="color: #f92672">]</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">tag</span>
-      <span style="color: #f8f8f2">tag_title_prefix</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">site</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">config</span><span style="color: #f92672">[</span><span style="color: #e6db74">&#39;tag_title_prefix&#39;</span><span style="color: #f92672">]</span> <span style="color: #f92672">||</span> <span style="color: #e6db74">&#39;Tagged: &#39;</span>
-      <span style="color: #f8f8f2">tag_title_suffix</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">site</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">config</span><span style="color: #f92672">[</span><span style="color: #e6db74">&#39;tag_title_suffix&#39;</span><span style="color: #f92672">]</span> <span style="color: #f92672">||</span> <span style="color: #e6db74">&#39;–&#39;</span>
-      <span style="color: #f8f8f2">self</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">data</span><span style="color: #f92672">[</span><span style="color: #e6db74">&#39;title&#39;</span><span style="color: #f92672">]</span> <span style="color: #f92672">=</span> <span style="color: #e6db74">&quot;#{</span><span style="color: #f8f8f2">tag_title_prefix</span><span style="color: #e6db74">}#{</span><span style="color: #f8f8f2">tag</span><span style="color: #e6db74">}&quot;</span>
-      <span style="color: #f8f8f2">self</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">data</span><span style="color: #f92672">[</span><span style="color: #e6db74">&#39;description&#39;</span><span style="color: #f92672">]</span> <span style="color: #f92672">=</span> <span style="color: #e6db74">&quot;An archive of posts tagged #{</span><span style="color: #f8f8f2">tag</span><span style="color: #e6db74">}.&quot;</span>
-    <span style="color: #66d9ef">end</span>
-  <span style="color: #66d9ef">end</span>
-<span style="color: #66d9ef">end</span>
-</pre></div>
+</nav><!-- /.pagination -->
+module Jekyll
+  class TagIndex < Page
+    def initialize(site, base, dir, tag)
+      @site = site
+      @base = base
+      @dir = dir
+      @name = 'index.html'
+      self.process(@name)
+      self.read_yaml(File.join(base, '_layouts'), 'tag_index.html')
+      self.data['tag'] = tag
+      tag_title_prefix = site.config['tag_title_prefix'] || 'Tagged: '
+      tag_title_suffix = site.config['tag_title_suffix'] || '–'
+      self.data['title'] = "#{tag_title_prefix}#{tag}"
+      self.data['description'] = "An archive of posts tagged #{tag}."
+    end
+  end
+end
 
 <h3 id="standard-code-block">Standard Code Block</h3>
 
@@ -215,39 +241,36 @@
 <h3 id="fenced-code-blocks">Fenced Code Blocks</h3>
 
 <p>To modify styling and highlight colors edit <code>/static/css/_sass/_coderay.scss</code>.</p>
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">#container</span> <span style="color: #f8f8f2">{</span>
-    <span style="color: #f8f8f2">float</span><span style="color: #f92672">:</span> <span style="color: #f8f8f2">left;</span>
-    <span style="color: #f8f8f2">margin</span><span style="color: #f92672">:</span> <span style="color: #ae81ff">0</span> <span style="color: #ae81ff">-240px</span> <span style="color: #ae81ff">0</span> <span style="color: #ae81ff">0</span><span style="color: #f8f8f2">;</span>
-    <span style="color: #f8f8f2">width</span><span style="color: #f92672">:</span> <span style="color: #ae81ff">100%</span><span style="color: #f8f8f2">;</span>
-<span style="color: #f8f8f2">}</span>
-</pre></div>
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">&lt;</span><span style="color: #f92672">nav</span> <span style="color: #a6e22e">class</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;pagination&quot;</span> <span style="color: #a6e22e">role</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;navigation&quot;</span><span style="color: #f8f8f2">&gt;</span>
+#container {
+    float: left;
+    margin: 0 -240px 0 0;
+    width: 100%;
+}
+<nav class="pagination" role="navigation">
     {% if page.previous %}
-        <span style="color: #f8f8f2">&lt;</span><span style="color: #f92672">a</span> <span style="color: #a6e22e">href</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;{{ site.url }}{{ page.previous.url }}&quot;</span> <span style="color: #a6e22e">class</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;btn&quot;</span> <span style="color: #a6e22e">title</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;{{ page.previous.title }}&quot;</span><span style="color: #f8f8f2">&gt;</span>Previous article<span style="color: #f8f8f2">&lt;/</span><span style="color: #f92672">a</span><span style="color: #f8f8f2">&gt;</span>
+        <a href="{{ site.url }}{{ page.previous.url }}" class="btn" title="{{ page.previous.title }}">Previous article</a>
     {% endif %}
     {% if page.next %}
-        <span style="color: #f8f8f2">&lt;</span><span style="color: #f92672">a</span> <span style="color: #a6e22e">href</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;{{ site.url }}{{ page.next.url }}&quot;</span> <span style="color: #a6e22e">class</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;btn&quot;</span> <span style="color: #a6e22e">title</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;{{ page.next.title }}&quot;</span><span style="color: #f8f8f2">&gt;</span>Next article<span style="color: #f8f8f2">&lt;/</span><span style="color: #f92672">a</span><span style="color: #f8f8f2">&gt;</span>
+        <a href="{{ site.url }}{{ page.next.url }}" class="btn" title="{{ page.next.title }}">Next article</a>
     {% endif %}
-<span style="color: #f8f8f2">&lt;/</span><span style="color: #f92672">nav</span><span style="color: #f8f8f2">&gt;</span><span style="color: #75715e">&lt;!-- /.pagination --&gt;</span>
-</pre></div>
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #66d9ef">module</span> <span style="color: #f8f8f2">Jekyll</span>
-  <span style="color: #66d9ef">class</span> <span style="color: #a6e22e">TagIndex</span> <span style="color: #f92672">&lt;</span> <span style="color: #66d9ef">Page</span>
-    <span style="color: #66d9ef">def</span> <span style="color: #a6e22e">initialize</span><span style="color: #f8f8f2">(site,</span> <span style="color: #f8f8f2">base,</span> <span style="color: #f8f8f2">dir,</span> <span style="color: #f8f8f2">tag)</span>
-      <span style="color: #f8f8f2">@site</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">site</span>
-      <span style="color: #f8f8f2">@base</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">base</span>
-      <span style="color: #f8f8f2">@dir</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">dir</span>
-      <span style="color: #f8f8f2">@name</span> <span style="color: #f92672">=</span> <span style="color: #e6db74">&#39;index.html&#39;</span>
-      <span style="color: #f8f8f2">self</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">process(@name)</span>
-      <span style="color: #f8f8f2">self</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">read_yaml(</span><span style="color: #66d9ef">File</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">join(base,</span> <span style="color: #e6db74">&#39;_layouts&#39;</span><span style="color: #f8f8f2">),</span> <span style="color: #e6db74">&#39;tag_index.html&#39;</span><span style="color: #f8f8f2">)</span>
-      <span style="color: #f8f8f2">self</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">data</span><span style="color: #f92672">[</span><span style="color: #e6db74">&#39;tag&#39;</span><span style="color: #f92672">]</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">tag</span>
-      <span style="color: #f8f8f2">tag_title_prefix</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">site</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">config</span><span style="color: #f92672">[</span><span style="color: #e6db74">&#39;tag_title_prefix&#39;</span><span style="color: #f92672">]</span> <span style="color: #f92672">||</span> <span style="color: #e6db74">&#39;Tagged: &#39;</span>
-      <span style="color: #f8f8f2">tag_title_suffix</span> <span style="color: #f92672">=</span> <span style="color: #f8f8f2">site</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">config</span><span style="color: #f92672">[</span><span style="color: #e6db74">&#39;tag_title_suffix&#39;</span><span style="color: #f92672">]</span> <span style="color: #f92672">||</span> <span style="color: #e6db74">&#39;–&#39;</span>
-      <span style="color: #f8f8f2">self</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">data</span><span style="color: #f92672">[</span><span style="color: #e6db74">&#39;title&#39;</span><span style="color: #f92672">]</span> <span style="color: #f92672">=</span> <span style="color: #e6db74">&quot;#{</span><span style="color: #f8f8f2">tag_title_prefix</span><span style="color: #e6db74">}#{</span><span style="color: #f8f8f2">tag</span><span style="color: #e6db74">}&quot;</span>
-      <span style="color: #f8f8f2">self</span><span style="color: #f92672">.</span><span style="color: #f8f8f2">data</span><span style="color: #f92672">[</span><span style="color: #e6db74">&#39;description&#39;</span><span style="color: #f92672">]</span> <span style="color: #f92672">=</span> <span style="color: #e6db74">&quot;An archive of posts tagged #{</span><span style="color: #f8f8f2">tag</span><span style="color: #e6db74">}.&quot;</span>
-    <span style="color: #66d9ef">end</span>
-  <span style="color: #66d9ef">end</span>
-<span style="color: #66d9ef">end</span>
-</pre></div>
+</nav><!-- /.pagination -->
+module Jekyll
+  class TagIndex < Page
+    def initialize(site, base, dir, tag)
+      @site = site
+      @base = base
+      @dir = dir
+      @name = 'index.html'
+      self.process(@name)
+      self.read_yaml(File.join(base, '_layouts'), 'tag_index.html')
+      self.data['tag'] = tag
+      tag_title_prefix = site.config['tag_title_prefix'] || 'Tagged: '
+      tag_title_suffix = site.config['tag_title_suffix'] || '–'
+      self.data['title'] = "#{tag_title_prefix}#{tag}"
+      self.data['description'] = "An archive of posts tagged #{tag}."
+    end
+  end
+end
 
 <h3 id="github-gist-embed">GitHub Gist Embed</h3>
 
@@ -309,8 +332,7 @@
     <iframe width="560" height="315" src="//www.youtube.com/embed/SU3kYxJmWuQ" frameborder="0"></iframe>
 
 <p>Video embeds are responsive and scale with the width of the main content block with the help of <a href="http://fitvidsjs.com/">FitVids</a>.</p>
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">&lt;</span><span style="color: #f92672">iframe</span> <span style="color: #a6e22e">width</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;560&quot;</span> <span style="color: #a6e22e">height</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;315&quot;</span> <span style="color: #a6e22e">src</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;//www.youtube.com/embed/SU3kYxJmWuQ&quot;</span> <span style="color: #a6e22e">frameborder</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;0&quot;</span><span style="color: #f8f8f2">&gt;&lt;/</span><span style="color: #f92672">iframe</span><span style="color: #f8f8f2">&gt;</span>
-</pre></div>
+<iframe width="560" height="315" src="//www.youtube.com/embed/SU3kYxJmWuQ" frameborder="0"></iframe>
 
   </div>
 </article>
@@ -378,82 +400,6 @@
 <p>Occupy et selvage squid, pug brunch blog nesciunt hashtag mumblecore skateboard yr kogi. Ugh small batch swag four loko. Fap post-ironic qui tote bag farm-to-table american apparel scenester keffiyeh vero, swag non pour-over gentrify authentic pitchfork. Schlitz scenester lo-fi voluptate, tote bag irony bicycle rights pariatur vero Vice freegan wayfarers exercitation nisi shoreditch. Chambray tofu vero sed. Street art swag literally leggings, Cosby sweater mixtape PBR lomo Banksy non in pitchfork ennui McSweeney&rsquo;s selfies. Odd Future Banksy non authentic.</p>
 
 <p>Aliquip enim artisan dolor post-ironic. Pug tote bag Marfa, deserunt pour-over Portland wolf eu odio intelligentsia american apparel ugh ea. Sunt viral et, 3 wolf moon gastropub pug id. Id fashion axe est typewriter, mlkshk Portland art party aute brunch. Sint pork belly Cosby sweater, deep v mumblecore kitsch american apparel. Try-hard direct trade tumblr sint skateboard. Adipisicing bitters excepteur biodiesel, pickled gastropub aute veniam.</p>
-
-  </div>
-</article>
-
-<article class="hentry">
-  <header>
-    
-    <div class="entry-meta">
-         
-		<span class="entry-date date published updated"><time datetime="2013-05-22 00:00:00 &#43;0000 UTC"><a href="/posts/sample-post-images/">May 22, 2013</a></time></span>
-        
-      <span class="entry-reading-time">
-        <i class="fa fa-clock-o"></i>
-        Reading time ~1 minute
-      </span>
-    </div>
-    
-	<h1 class="entry-title"><a href="/posts/sample-post-images/" rel="bookmark" title="A Post with Images" itemprop="url">A Post with Images</a></h1>
-    
-  </header>
-  <div class="entry-content">
-    
-
-<p>Here are some examples of what a post with images might look like. If you want to display two or three images next to each other responsively use <code>figure</code> with the appropriate <code>class</code>. Each instance of <code>figure</code> is auto-numbered and displayed in the caption.</p>
-
-<h2 id="figures-for-images-or-video">Figures (for images or video)</h2>
-
-<h3 id="one-up">One Up</h3>
-
-<figure>
-    <a href="//farm9.staticflickr.com/8426/7758832526_cc8f681e48_b.jpg"><img src="//farm9.staticflickr.com/8426/7758832526_cc8f681e48_c.jpg" alt=""></a>
-    <figcaption><a href="//www.flickr.com/photos/80901381@N04/7758832526/" title="Morning Fog Emerging From Trees by A Guy Taking Pictures, on Flickr">Morning Fog Emerging From Trees by A Guy Taking Pictures, on Flickr</a>.</figcaption>
-</figure>
-
-<h3 id="two-up">Two Up</h3>
-
-<p>Apply the <code>half</code> class like so to display two images side by side that share the same caption.</p>
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">&lt;</span><span style="color: #f92672">figure</span> <span style="color: #a6e22e">class</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;half&quot;</span><span style="color: #f8f8f2">&gt;</span>
-	<span style="color: #f8f8f2">&lt;</span><span style="color: #f92672">img</span> <span style="color: #a6e22e">src</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;/images/image-filename-1.jpg&quot;</span> <span style="color: #a6e22e">alt</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;&quot;</span><span style="color: #f8f8f2">&gt;</span>
-	<span style="color: #f8f8f2">&lt;</span><span style="color: #f92672">img</span> <span style="color: #a6e22e">src</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;/images/image-filename-2.jpg&quot;</span> <span style="color: #a6e22e">alt</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;&quot;</span><span style="color: #f8f8f2">&gt;</span>
-	<span style="color: #f8f8f2">&lt;</span><span style="color: #f92672">figcaption</span><span style="color: #f8f8f2">&gt;</span>Caption describing these two images.<span style="color: #f8f8f2">&lt;/</span><span style="color: #f92672">figcaption</span><span style="color: #f8f8f2">&gt;</span>
-<span style="color: #f8f8f2">&lt;/</span><span style="color: #f92672">figure</span><span style="color: #f8f8f2">&gt;</span>
-</pre></div>
-
-<p>And you&rsquo;ll get something that looks like this:</p>
-
-<figure class="half">
-    <a href="//placehold.it/1200x600.jpg"><img src="//placehold.it/600x300.jpg" alt=""></a>
-    <a href="//placehold.it/1200x600.jpg"><img src="//placehold.it/600x300.jpg" alt=""></a>
-    <img src="//placehold.it/600x300.jpg" alt="">
-    <img src="//placehold.it/600x300.jpg" alt="">
-    <figcaption>Two images.</figcaption>
-</figure>
-
-<h3 id="three-up">Three Up</h3>
-
-<p>Apply the <code>third</code> class like so to display three images side by side that share the same caption.</p>
-<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">&lt;</span><span style="color: #f92672">figure</span> <span style="color: #a6e22e">class</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;third&quot;</span><span style="color: #f8f8f2">&gt;</span>
-	<span style="color: #f8f8f2">&lt;</span><span style="color: #f92672">a</span> <span style="color: #a6e22e">href</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;//placehold.it/1200x600.jpg&quot;</span><span style="color: #f8f8f2">&gt;&lt;</span><span style="color: #f92672">img</span> <span style="color: #a6e22e">src</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;//placehold.it/600x300.jpg&quot;</span> <span style="color: #a6e22e">alt</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;&quot;</span><span style="color: #f8f8f2">&gt;&lt;/</span><span style="color: #f92672">a</span><span style="color: #f8f8f2">&gt;</span>
-	<span style="color: #f8f8f2">&lt;</span><span style="color: #f92672">a</span> <span style="color: #a6e22e">href</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;//placehold.it/1200x600.jpg&quot;</span><span style="color: #f8f8f2">&gt;&lt;</span><span style="color: #f92672">img</span> <span style="color: #a6e22e">src</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;//placehold.it/600x300.jpg&quot;</span> <span style="color: #a6e22e">alt</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;&quot;</span><span style="color: #f8f8f2">&gt;&lt;/</span><span style="color: #f92672">a</span><span style="color: #f8f8f2">&gt;</span>
-	<span style="color: #f8f8f2">&lt;</span><span style="color: #f92672">a</span> <span style="color: #a6e22e">href</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;//placehold.it/1200x600.jpg&quot;</span><span style="color: #f8f8f2">&gt;&lt;</span><span style="color: #f92672">img</span> <span style="color: #a6e22e">src</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;//placehold.it/600x300.jpg&quot;</span> <span style="color: #a6e22e">alt</span><span style="color: #f92672">=</span><span style="color: #e6db74">&quot;&quot;</span><span style="color: #f8f8f2">&gt;&lt;/</span><span style="color: #f92672">a</span><span style="color: #f8f8f2">&gt;</span>
-	<span style="color: #f8f8f2">&lt;</span><span style="color: #f92672">figcaption</span><span style="color: #f8f8f2">&gt;</span>Caption describing these three images.<span style="color: #f8f8f2">&lt;/</span><span style="color: #f92672">figcaption</span><span style="color: #f8f8f2">&gt;</span>
-<span style="color: #f8f8f2">&lt;/</span><span style="color: #f92672">figure</span><span style="color: #f8f8f2">&gt;</span>
-</pre></div>
-
-<p>And you&rsquo;ll get something that looks like this:</p>
-
-<figure class="third">
-    <a href="//placehold.it/1200x600.jpg"><img src="//placehold.it/600x300.jpg" alt=""></a>
-    <a href="//placehold.it/1200x600.jpg"><img src="//placehold.it/600x300.jpg" alt=""></a>
-    <a href="//placehold.it/1200x600.jpg"><img src="//placehold.it/600x300.jpg" alt=""></a>
-    <a href="//placehold.it/1200x600.jpg"><img src="//placehold.it/600x300.jpg" alt=""></a>
-    <a href="//placehold.it/1200x600.jpg"><img src="//placehold.it/600x300.jpg" alt=""></a>
-    <a href="//placehold.it/1200x600.jpg"><img src="//placehold.it/600x300.jpg" alt=""></a>
-    <figcaption>Three images.</figcaption>
-</figure>
 
   </div>
 </article>

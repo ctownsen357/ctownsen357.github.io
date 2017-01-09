@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>ctownsen357@github.io</title>
+    <title>Glusterfs on ctownsen357@github.io</title>
     <link>http://ctownsen357.github.io/categories/glusterfs/index.xml</link>
-    <description>Recent content on ctownsen357@github.io</description>
+    <description>Recent content in Glusterfs on ctownsen357@github.io</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
     <atom:link href="http://ctownsen357.github.io/categories/glusterfs/index.xml" rel="self" type="application/rss+xml" />
@@ -23,35 +23,30 @@
 &lt;h3 id=&#34;get-the-latest-gluster-container&#34;&gt;Get the latest Gluster container:&lt;/h3&gt;
 
 &lt;p&gt;&lt;a href=&#34;https://github.com/gluster/gluster-containers&#34;&gt;Get the latest container:&lt;/a&gt;&lt;/p&gt;
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;docker pull gluster/gluster-centos
-&lt;/pre&gt;&lt;/div&gt;
+docker pull gluster/gluster-centos
 
 &lt;h3 id=&#34;make-the-persistent-data-folders-on-each-host&#34;&gt;Make the persistent data folders on each host:&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;sudo mkdir -p /gluster/logs &lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo mkdir /gluster/data &lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo mkdir /gluster/config &lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; /gluster/mnt
-&lt;/pre&gt;&lt;/div&gt;
+sudo mkdir -p /gluster/logs &amp;&amp; sudo mkdir /gluster/data &amp;&amp; sudo mkdir /gluster/config &amp;&amp; /gluster/mnt
 
 &lt;h3 id=&#34;start-a-glusterfs-container-on-each-host&#34;&gt;Start a GlusterFS container on each host:&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;docker run -d &lt;span style=&#34;color: #ae81ff&#34;&gt;\&lt;/span&gt;
-   --name gluster &lt;span style=&#34;color: #ae81ff&#34;&gt;\&lt;/span&gt;
-   --privileged &lt;span style=&#34;color: #ae81ff&#34;&gt;\&lt;/span&gt;
-   --net&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;host &lt;span style=&#34;color: #ae81ff&#34;&gt;\&lt;/span&gt;
-   -v /gluster/data:/gluster &lt;span style=&#34;color: #ae81ff&#34;&gt;\&lt;/span&gt;
-   -v /gluster/logs:/var/log/glusterfs &lt;span style=&#34;color: #ae81ff&#34;&gt;\&lt;/span&gt;
-   -v /gluster/config:/var/lib/glusterd &lt;span style=&#34;color: #ae81ff&#34;&gt;\&lt;/span&gt;
-   -v /gluster/mnt:/gluster/mnt &lt;span style=&#34;color: #ae81ff&#34;&gt;\&lt;/span&gt;
+docker run -d \
+   --name gluster \
+   --privileged \
+   --net=host \
+   -v /gluster/data:/gluster \
+   -v /gluster/logs:/var/log/glusterfs \
+   -v /gluster/config:/var/lib/glusterd \
+   -v /gluster/mnt:/gluster/mnt \
    gluster/gluster-centos
-&lt;/pre&gt;&lt;/div&gt;
 
 &lt;h3 id=&#34;probe-the-hosts-in-the-cluster&#34;&gt;Probe the hosts in the cluster:&lt;/h3&gt;
 
 &lt;p&gt;For each container on each host you&amp;rsquo;ll want to execute this to get them aware of the other peers.  If running out on AWS these steps could be orchestrated through the init system on the hosts so you don&amp;rsquo;t have to log into each machine.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;gluster peer probe 1.1.1.1
-&lt;/pre&gt;&lt;/div&gt;
+gluster peer probe 1.1.1.1
 
 &lt;h3 id=&#34;now-create-your-volume-and-start-it&#34;&gt;Now create your volume and start it:&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;gluster volume create media replica &lt;span style=&#34;color: #ae81ff&#34;&gt;3&lt;/span&gt; transport tcp 172.30.0.185:/gluster/data  172.30.0.186:/gluster/data 172.30.0.30:/
+gluster volume create media replica 3 transport tcp 172.30.0.185:/gluster/data  172.30.0.186:/gluster/data 172.30.0.30:/
 gluster volume start media
-&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;In this example I&amp;rsquo;m replicating across each of three servers but depending on your needs you could: distributed striped, distributed, replicated, distributed striped replicated, &amp;hellip; know what and why.&lt;/p&gt;
 
@@ -60,12 +55,10 @@ gluster volume start media
 &lt;p&gt;The docs made a big deal out of mounting the volume.  I suspect if you were doing anything other than replicating that would become very important.&lt;/p&gt;
 
 &lt;p&gt;You&amp;rsquo;ll want to do this on each host, using its internal ip:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;mount -t glusterfs 172.30.0.186:/media /gluster/mnt
-&lt;/pre&gt;&lt;/div&gt;
+mount -t glusterfs 172.30.0.186:/media /gluster/mnt
 
 &lt;p&gt;From one of the hosts testing with a write statement to the volume:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;testing, 1,2,3...&amp;quot;&lt;/span&gt; &amp;gt;&amp;gt; /gluster/mnt/test.txt
-&lt;/pre&gt;&lt;/div&gt;
+echo &#34;testing, 1,2,3...&#34; &gt;&gt; /gluster/mnt/test.txt
 
 &lt;p&gt;And from another host you should be able to read/write to the same document.  One could then launch containers on any host with a mount to /gluster/mnt to store data.  Then it would have access to the data no matter which node it was launched on.&lt;/p&gt;
 </description>
