@@ -61,7 +61,7 @@
 
 <meta http-equiv="cleartype" content="on">
 
-<meta name="generator" content="Hugo 0.18.1" />
+<meta name="generator" content="Hugo 0.17" />
 
 <script src="/js/vendor/modernizr-2.6.2.custom.min.js"></script>
 
@@ -158,9 +158,8 @@
     <p>You know it before you even try.  You try anyway.  Something like trying to bzip2  316,387 CSV files representing ~ 10TB of data.  You know it will be at least <sup>1</sup>&frasl;<sub>10</sub> the size and R can handle the bzip2 files directly so you call bzip2 and get the argument list too long error.</p>
 
 <p>Find and xargs to the rescue!  Also, lbzip2 because you really don&rsquo;t want to wait on bzip2 any more than you have to.</p>
-
-find path_to_files/ -name "*.csv" | xargs -P 5 lbzip2
-
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>find path_to_files/ -name <span style="color: #e6db74">&quot;*.csv&quot;</span> <span style="color: #f8f8f2">|</span> xargs -P <span style="color: #ae81ff">5</span> lbzip2
+</pre></div>
 
 <p><strong>Note:</strong> you&rsquo;ll want to balance the number of parallel lbzip2 instances (or whatever you are running) as indicated by -P 5 above, balance that with the fact that lbzip2 runs in parallel too.</p>
 
@@ -191,17 +190,18 @@ find path_to_files/ -name "*.csv" | xargs -P 5 lbzip2
 <p><strong>Note:</strong> I map /opt/bin from the host to a folder in the container.  I store custom binaries and scripts in /opt/bin on CoreOS as it is in the path and persists even after CoreOS updates to the latest version.  I&rsquo;ve also changed the example from a Fedora container to CentOS as CentOS already has items installed that the example I link to installed in addition to the dev tools and libraries.</p>
 
 <p>This is how I got around that problem:</p>
-docker run -t -i -v /opt/bin:/host_tmp centos /bin/bash
-yum groupinstall -y "Development Tools" "Development Libraries"
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>docker run -t -i -v /opt/bin:/host_tmp centos /bin/bash
+yum groupinstall -y <span style="color: #e6db74">&quot;Development Tools&quot;</span> <span style="color: #e6db74">&quot;Development Libraries&quot;</span>
 
-curl https://download.samba.org/pub/linux-cifs/cifs-utils/cifs-utils-6.3.tar.bz2 | bunzip2 -c - | tar -xvf -
-cd cifs-utils-6.3/
-./configure && make
+curl https://download.samba.org/pub/linux-cifs/cifs-utils/cifs-utils-6.3.tar.bz2 <span style="color: #f8f8f2">|</span> bunzip2 -c - <span style="color: #f8f8f2">|</span> tar -xvf -
+<span style="color: #f8f8f2">cd</span> cifs-utils-6.3/
+./configure <span style="color: #f92672">&amp;&amp;</span> make
 cp mount.cifs /host_tmp/
-exit
+<span style="color: #f8f8f2">exit</span>
 
 sudo mkdir /media/foo
-sudo mount.cifs "//1.1.1.1/ntfs_share" -o username=winuser,domain=mydomain.com,rw,dir_mode=0775,noperm /media/foo/ 
+sudo mount.cifs <span style="color: #e6db74">&quot;//1.1.1.1/ntfs_share&quot;</span> -o <span style="color: #f8f8f2">username</span><span style="color: #f92672">=</span>winuser,domain<span style="color: #f92672">=</span>mydomain.com,rw,dir_mode<span style="color: #f92672">=</span>0775,noperm /media/foo/ 
+</pre></div>
 
 <p>Originally <a href="https://gist.github.com/pantelis/540a19262cacc841fb0a">found here</a>.</p>
 
@@ -234,7 +234,8 @@ sudo mount.cifs "//1.1.1.1/ntfs_share" -o username=winuser,domain=mydomain.com,r
 </ul>
 
 <p>The pipe, bash, awk solution:</p>
-echo ' pwd' > cmd.txt && docker events | awk '/container restart/{system("echo docker exec " $4 " $(cat cmd.txt) | bash -")}'
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">echo</span> <span style="color: #e6db74">&#39; pwd&#39;</span> &gt; cmd.txt <span style="color: #f92672">&amp;&amp;</span> docker events <span style="color: #f8f8f2">|</span> awk <span style="color: #e6db74">&#39;/container restart/{system(&quot;echo docker exec &quot; $4 &quot; $(cat cmd.txt) | bash -&quot;)}&#39;</span>
+</pre></div>
 
 <p>This pipes the pwd command into a file and then pipes the stream from docker events into awk which is searching for the restart event.  When the restart event is encountered it executes the arbitrary command from the text file against the restarted container.  The command in the text file could be replaced with any desired command.</p>
 
@@ -260,7 +261,8 @@ echo ' pwd' > cmd.txt && docker events | awk '/container restart/{system("echo d
     
   </header>
   <div class="entry-content">
-    ctl+r...
+    <div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>ctl+r...
+</pre></div>
 
 <p>Control plus r and start typing part of a command you want to recall - searches the history from the terminal.  This is an old but good one.  Even after several years of doing command line work I still use this one fondly as it took several years of work prior to discovering this trick to stumble upon it!</p>
 
@@ -284,7 +286,8 @@ echo ' pwd' > cmd.txt && docker events | awk '/container restart/{system("echo d
     
   </header>
   <div class="entry-content">
-    ssh -NL 3389:internal.network.ip.address:3389 user@public.ip.address
+    <div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>ssh -NL 3389:internal.network.ip.address:3389 user@public.ip.address
+</pre></div>
 
 <p>In this example I&rsquo;m forwarding an RDP connection to a machine on some internal network IP address through a public facing SSH server.  I&rsquo;ve found this sort of tunelling through SSH to be invaluable and I&rsquo;ve used it for everything from accessing Windows servers over RDP where the only external access was a key protected SSH server to forwarding http/https traffic to remote APIs for testing and debugging.</p>
 

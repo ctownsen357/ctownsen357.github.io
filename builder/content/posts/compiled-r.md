@@ -13,7 +13,7 @@ While investigating ways to make some R code more performant I came across the c
 
 ## Just-in-time Compile
 
-```
+```{r}
 library(compiler)
 enableJIT(3)
 ```

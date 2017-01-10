@@ -52,7 +52,7 @@
 
 <meta http-equiv="cleartype" content="on">
 
-<meta name="generator" content="Hugo 0.18.1" />
+<meta name="generator" content="Hugo 0.17" />
 
 <script src="/js/vendor/modernizr-2.6.2.custom.min.js"></script>
 
@@ -148,34 +148,36 @@
 <p>While investigating ways to make some R code more performant I came across the compiler package.  This package allows one to compile functions and/or entire files into compiled bytecode.  Alternatively one may also enable just-in-time compilation.  In my use case with Rserve the JIT compilation options actually made performance worse because each session was recompiling everything rather than sharing compiled source.  In my case the way forward was to compile the files into bytecode so they were precompiled manually and available as bytecode files.</p>
 
 <h2 id="just-in-time-compile">Just-in-time Compile</h2>
-
-<pre><code>library(compiler)
-enableJIT(3)
-</code></pre>
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f92672">library</span><span style="color: #f8f8f2">(</span>compiler<span style="color: #f8f8f2">)</span>
+enableJIT<span style="color: #f8f8f2">(</span><span style="color: #ae81ff">3</span><span style="color: #f8f8f2">)</span>
+</pre></div>
 
 <p>The options for JIT are 0 through 3, inicating no JIT through the max level where everything possible is compiled before first use.</p>
 
 <h2 id="compiling-functions">Compiling functions</h2>
-library(compiler)
-myfoo <- function(){
-    seq(1:5)
-}
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f92672">library</span><span style="color: #f8f8f2">(</span>compiler<span style="color: #f8f8f2">)</span>
+myfoo <span style="color: #f92672">&lt;-</span> <span style="color: #66d9ef">function</span><span style="color: #f8f8f2">(){</span>
+    <span style="color: #66d9ef">seq</span><span style="color: #f8f8f2">(</span><span style="color: #ae81ff">1</span><span style="color: #f92672">:</span><span style="color: #ae81ff">5</span><span style="color: #f8f8f2">)</span>
+<span style="color: #f8f8f2">}</span>
 
-compiledfoo <- cmpfun(myfoo)
+compiledfoo <span style="color: #f92672">&lt;-</span> cmpfun<span style="color: #f8f8f2">(</span>myfoo<span style="color: #f8f8f2">)</span>
+</pre></div>
 
 <p>That example is not going to yield any performance benefit because seq is already compiled but it demonstrates HOW to compile a function.  My experience was that it is about 2-3 times faster and is most helpful for a function that gets called multiple times.</p>
 
 <h2 id="compiling-an-entire-r-file">Compiling an entire R file</h2>
-library(compiler)
-cmpfile(infile='<path_to_file>.R')
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f92672">library</span><span style="color: #f8f8f2">(</span>compiler<span style="color: #f8f8f2">)</span>
+cmpfile<span style="color: #f8f8f2">(</span>infile<span style="color: #f92672">=</span><span style="color: #e6db74">&#39;&lt;path_to_file&gt;.R&#39;</span><span style="color: #f8f8f2">)</span>
+</pre></div>
 
 <p>This will compile the entire R file down to bytecode in the same location with an extension of .Rc  This compiled file may then be sourced in other R files and the performance benefits I saw were highly dependent on the types of routines being called.</p>
 
 <h2 id="sourcing-your-newly-compiled-r-file">Sourcing your newly compiled R file</h2>
-library(compiler)
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f92672">library</span><span style="color: #f8f8f2">(</span>compiler<span style="color: #f8f8f2">)</span>
 
-loadcmp('<path/to/compiled/file>.Rc')
-# call all of your functions as you normally would
+loadcmp<span style="color: #f8f8f2">(</span><span style="color: #e6db74">&#39;&lt;path/to/compiled/file&gt;.Rc&#39;</span><span style="color: #f8f8f2">)</span>
+<span style="color: #75715e"># call all of your functions as you normally would</span>
+</pre></div>
 
   </div>
 </article>
@@ -208,10 +210,11 @@ loadcmp('<path/to/compiled/file>.Rc')
 <p>The ff package provides data structures that are stored on disk but behave (almost) as if they were in RAM by transparently mapping only a section (pagesize) in main memory - the effective virtual memory consumption per ff object.</p>
 
 <p>I loaded the original data frame and tried to cast it to an ffdf (ff data frame):</p>
-require(ffbase)
-load('./35509-0001-Data.rda')
-testffdf <- as.ffdf(da35509.0001, vmode = NULL)
-save.ffdf(testffdf, dir="./testdf", relative=TRUE)
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f92672">require</span><span style="color: #f8f8f2">(</span>ffbase<span style="color: #f8f8f2">)</span>
+<span style="color: #66d9ef">load</span><span style="color: #f8f8f2">(</span><span style="color: #e6db74">&#39;./35509-0001-Data.rda&#39;</span><span style="color: #f8f8f2">)</span>
+testffdf <span style="color: #f92672">&lt;-</span> as.ffdf<span style="color: #f8f8f2">(</span>da35509.0001<span style="color: #f8f8f2">,</span> vmode <span style="color: #f92672">=</span> <span style="color: #66d9ef">NULL</span><span style="color: #f8f8f2">)</span>
+save.ffdf<span style="color: #f8f8f2">(</span>testffdf<span style="color: #f8f8f2">,</span> dir<span style="color: #f92672">=</span><span style="color: #e6db74">&quot;./testdf&quot;</span><span style="color: #f8f8f2">,</span> relative<span style="color: #f92672">=</span><span style="color: #66d9ef">TRUE</span><span style="color: #f8f8f2">)</span>
+</pre></div>
 
 <p>It failed silently.  I looked in the <code>./testdf</code> and nothing.  Ugh, what appeared so promising now looked bleak!</p>
 
@@ -247,8 +250,9 @@ kern.maxfiles=8192
 <p>Now I&rsquo;m able to load  what was 750MB per data frame instance as a ffdf and only consume ~ 11MB of RAM per instance.  Many parallel instances of the R routines using this data may be run without exhausting available RAM.  Keep in mind that you&rsquo;ll want to tweak your max open file settings to account for expected concurrent use.</p>
 
 <p>You can test this by opening up a new R session, changing directories to where you were working previously and loading the ffdf from disk:</p>
-required(ffbase)
-load.ffdf('./testdf')
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>required<span style="color: #f8f8f2">(</span>ffbase<span style="color: #f8f8f2">)</span>
+load.ffdf<span style="color: #f8f8f2">(</span><span style="color: #e6db74">&#39;./testdf&#39;</span><span style="color: #f8f8f2">)</span>
+</pre></div>
 
 <p>Your should now have an instance of the original testffdf object.</p>
 
@@ -283,30 +287,35 @@ load.ffdf('./testdf')
 <h3 id="get-the-latest-gluster-container">Get the latest Gluster container:</h3>
 
 <p><a href="https://github.com/gluster/gluster-containers">Get the latest container:</a></p>
-docker pull gluster/gluster-centos
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>docker pull gluster/gluster-centos
+</pre></div>
 
 <h3 id="make-the-persistent-data-folders-on-each-host">Make the persistent data folders on each host:</h3>
-sudo mkdir -p /gluster/logs && sudo mkdir /gluster/data && sudo mkdir /gluster/config && /gluster/mnt
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>sudo mkdir -p /gluster/logs <span style="color: #f92672">&amp;&amp;</span> sudo mkdir /gluster/data <span style="color: #f92672">&amp;&amp;</span> sudo mkdir /gluster/config <span style="color: #f92672">&amp;&amp;</span> /gluster/mnt
+</pre></div>
 
 <h3 id="start-a-glusterfs-container-on-each-host">Start a GlusterFS container on each host:</h3>
-docker run -d \
-   --name gluster \
-   --privileged \
-   --net=host \
-   -v /gluster/data:/gluster \
-   -v /gluster/logs:/var/log/glusterfs \
-   -v /gluster/config:/var/lib/glusterd \
-   -v /gluster/mnt:/gluster/mnt \
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>docker run -d <span style="color: #ae81ff">\</span>
+   --name gluster <span style="color: #ae81ff">\</span>
+   --privileged <span style="color: #ae81ff">\</span>
+   --net<span style="color: #f92672">=</span>host <span style="color: #ae81ff">\</span>
+   -v /gluster/data:/gluster <span style="color: #ae81ff">\</span>
+   -v /gluster/logs:/var/log/glusterfs <span style="color: #ae81ff">\</span>
+   -v /gluster/config:/var/lib/glusterd <span style="color: #ae81ff">\</span>
+   -v /gluster/mnt:/gluster/mnt <span style="color: #ae81ff">\</span>
    gluster/gluster-centos
+</pre></div>
 
 <h3 id="probe-the-hosts-in-the-cluster">Probe the hosts in the cluster:</h3>
 
 <p>For each container on each host you&rsquo;ll want to execute this to get them aware of the other peers.  If running out on AWS these steps could be orchestrated through the init system on the hosts so you don&rsquo;t have to log into each machine.</p>
-gluster peer probe 1.1.1.1
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>gluster peer probe 1.1.1.1
+</pre></div>
 
 <h3 id="now-create-your-volume-and-start-it">Now create your volume and start it:</h3>
-gluster volume create media replica 3 transport tcp 172.30.0.185:/gluster/data  172.30.0.186:/gluster/data 172.30.0.30:/
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>gluster volume create media replica <span style="color: #ae81ff">3</span> transport tcp 172.30.0.185:/gluster/data  172.30.0.186:/gluster/data 172.30.0.30:/
 gluster volume start media
+</pre></div>
 
 <p>In this example I&rsquo;m replicating across each of three servers but depending on your needs you could: distributed striped, distributed, replicated, distributed striped replicated, &hellip; know what and why.</p>
 
@@ -315,10 +324,12 @@ gluster volume start media
 <p>The docs made a big deal out of mounting the volume.  I suspect if you were doing anything other than replicating that would become very important.</p>
 
 <p>You&rsquo;ll want to do this on each host, using its internal ip:</p>
-mount -t glusterfs 172.30.0.186:/media /gluster/mnt
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>mount -t glusterfs 172.30.0.186:/media /gluster/mnt
+</pre></div>
 
 <p>From one of the hosts testing with a write statement to the volume:</p>
-echo "testing, 1,2,3..." >> /gluster/mnt/test.txt
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f8f8f2">echo</span> <span style="color: #e6db74">&quot;testing, 1,2,3...&quot;</span> &gt;&gt; /gluster/mnt/test.txt
+</pre></div>
 
 <p>And from another host you should be able to read/write to the same document.  One could then launch containers on any host with a mount to /gluster/mnt to store data.  Then it would have access to the data no matter which node it was launched on.</p>
 
@@ -343,7 +354,8 @@ echo "testing, 1,2,3..." >> /gluster/mnt/test.txt
   </header>
   <div class="entry-content">
     <p>This forces a manual update if one is available:</p>
-update_engine_client -update
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>update_engine_client -update
+</pre></div>
 
   </div>
 </article>
@@ -368,9 +380,8 @@ update_engine_client -update
     <p>You know it before you even try.  You try anyway.  Something like trying to bzip2  316,387 CSV files representing ~ 10TB of data.  You know it will be at least <sup>1</sup>&frasl;<sub>10</sub> the size and R can handle the bzip2 files directly so you call bzip2 and get the argument list too long error.</p>
 
 <p>Find and xargs to the rescue!  Also, lbzip2 because you really don&rsquo;t want to wait on bzip2 any more than you have to.</p>
-
-find path_to_files/ -name "*.csv" | xargs -P 5 lbzip2
-
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>find path_to_files/ -name <span style="color: #e6db74">&quot;*.csv&quot;</span> <span style="color: #f8f8f2">|</span> xargs -P <span style="color: #ae81ff">5</span> lbzip2
+</pre></div>
 
 <p><strong>Note:</strong> you&rsquo;ll want to balance the number of parallel lbzip2 instances (or whatever you are running) as indicated by -P 5 above, balance that with the fact that lbzip2 runs in parallel too.</p>
 

@@ -49,7 +49,7 @@
 
 <meta http-equiv="cleartype" content="on">
 
-<meta name="generator" content="Hugo 0.18.1" />
+<meta name="generator" content="Hugo 0.17" />
 
 <script src="/js/vendor/modernizr-2.6.2.custom.min.js"></script>
 
@@ -130,34 +130,36 @@
 <p>While investigating ways to make some R code more performant I came across the compiler package.  This package allows one to compile functions and/or entire files into compiled bytecode.  Alternatively one may also enable just-in-time compilation.  In my use case with Rserve the JIT compilation options actually made performance worse because each session was recompiling everything rather than sharing compiled source.  In my case the way forward was to compile the files into bytecode so they were precompiled manually and available as bytecode files.</p>
 
 <h2 id="just-in-time-compile">Just-in-time Compile</h2>
-
-<pre><code>library(compiler)
-enableJIT(3)
-</code></pre>
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f92672">library</span><span style="color: #f8f8f2">(</span>compiler<span style="color: #f8f8f2">)</span>
+enableJIT<span style="color: #f8f8f2">(</span><span style="color: #ae81ff">3</span><span style="color: #f8f8f2">)</span>
+</pre></div>
 
 <p>The options for JIT are 0 through 3, inicating no JIT through the max level where everything possible is compiled before first use.</p>
 
 <h2 id="compiling-functions">Compiling functions</h2>
-library(compiler)
-myfoo <- function(){
-    seq(1:5)
-}
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f92672">library</span><span style="color: #f8f8f2">(</span>compiler<span style="color: #f8f8f2">)</span>
+myfoo <span style="color: #f92672">&lt;-</span> <span style="color: #66d9ef">function</span><span style="color: #f8f8f2">(){</span>
+    <span style="color: #66d9ef">seq</span><span style="color: #f8f8f2">(</span><span style="color: #ae81ff">1</span><span style="color: #f92672">:</span><span style="color: #ae81ff">5</span><span style="color: #f8f8f2">)</span>
+<span style="color: #f8f8f2">}</span>
 
-compiledfoo <- cmpfun(myfoo)
+compiledfoo <span style="color: #f92672">&lt;-</span> cmpfun<span style="color: #f8f8f2">(</span>myfoo<span style="color: #f8f8f2">)</span>
+</pre></div>
 
 <p>That example is not going to yield any performance benefit because seq is already compiled but it demonstrates HOW to compile a function.  My experience was that it is about 2-3 times faster and is most helpful for a function that gets called multiple times.</p>
 
 <h2 id="compiling-an-entire-r-file">Compiling an entire R file</h2>
-library(compiler)
-cmpfile(infile='<path_to_file>.R')
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f92672">library</span><span style="color: #f8f8f2">(</span>compiler<span style="color: #f8f8f2">)</span>
+cmpfile<span style="color: #f8f8f2">(</span>infile<span style="color: #f92672">=</span><span style="color: #e6db74">&#39;&lt;path_to_file&gt;.R&#39;</span><span style="color: #f8f8f2">)</span>
+</pre></div>
 
 <p>This will compile the entire R file down to bytecode in the same location with an extension of .Rc  This compiled file may then be sourced in other R files and the performance benefits I saw were highly dependent on the types of routines being called.</p>
 
 <h2 id="sourcing-your-newly-compiled-r-file">Sourcing your newly compiled R file</h2>
-library(compiler)
+<div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span><span style="color: #f92672">library</span><span style="color: #f8f8f2">(</span>compiler<span style="color: #f8f8f2">)</span>
 
-loadcmp('<path/to/compiled/file>.Rc')
-# call all of your functions as you normally would
+loadcmp<span style="color: #f8f8f2">(</span><span style="color: #e6db74">&#39;&lt;path/to/compiled/file&gt;.Rc&#39;</span><span style="color: #f8f8f2">)</span>
+<span style="color: #75715e"># call all of your functions as you normally would</span>
+</pre></div>
 
       <footer class="entry-meta">
           

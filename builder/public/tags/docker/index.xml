@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Docker on ctownsen357@github.io</title>
+    <title>ctownsen357@github.io</title>
     <link>http://ctownsen357.github.io/tags/docker/index.xml</link>
-    <description>Recent content in Docker on ctownsen357@github.io</description>
+    <description>Recent content on ctownsen357@github.io</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
     <atom:link href="http://ctownsen357.github.io/tags/docker/index.xml" rel="self" type="application/rss+xml" />
@@ -23,30 +23,35 @@
 &lt;h3 id=&#34;get-the-latest-gluster-container&#34;&gt;Get the latest Gluster container:&lt;/h3&gt;
 
 &lt;p&gt;&lt;a href=&#34;https://github.com/gluster/gluster-containers&#34;&gt;Get the latest container:&lt;/a&gt;&lt;/p&gt;
-docker pull gluster/gluster-centos
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;docker pull gluster/gluster-centos
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;h3 id=&#34;make-the-persistent-data-folders-on-each-host&#34;&gt;Make the persistent data folders on each host:&lt;/h3&gt;
-sudo mkdir -p /gluster/logs &amp;&amp; sudo mkdir /gluster/data &amp;&amp; sudo mkdir /gluster/config &amp;&amp; /gluster/mnt
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;sudo mkdir -p /gluster/logs &lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo mkdir /gluster/data &lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo mkdir /gluster/config &lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; /gluster/mnt
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;h3 id=&#34;start-a-glusterfs-container-on-each-host&#34;&gt;Start a GlusterFS container on each host:&lt;/h3&gt;
-docker run -d \
-   --name gluster \
-   --privileged \
-   --net=host \
-   -v /gluster/data:/gluster \
-   -v /gluster/logs:/var/log/glusterfs \
-   -v /gluster/config:/var/lib/glusterd \
-   -v /gluster/mnt:/gluster/mnt \
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;docker run -d &lt;span style=&#34;color: #ae81ff&#34;&gt;\&lt;/span&gt;
+   --name gluster &lt;span style=&#34;color: #ae81ff&#34;&gt;\&lt;/span&gt;
+   --privileged &lt;span style=&#34;color: #ae81ff&#34;&gt;\&lt;/span&gt;
+   --net&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;host &lt;span style=&#34;color: #ae81ff&#34;&gt;\&lt;/span&gt;
+   -v /gluster/data:/gluster &lt;span style=&#34;color: #ae81ff&#34;&gt;\&lt;/span&gt;
+   -v /gluster/logs:/var/log/glusterfs &lt;span style=&#34;color: #ae81ff&#34;&gt;\&lt;/span&gt;
+   -v /gluster/config:/var/lib/glusterd &lt;span style=&#34;color: #ae81ff&#34;&gt;\&lt;/span&gt;
+   -v /gluster/mnt:/gluster/mnt &lt;span style=&#34;color: #ae81ff&#34;&gt;\&lt;/span&gt;
    gluster/gluster-centos
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;h3 id=&#34;probe-the-hosts-in-the-cluster&#34;&gt;Probe the hosts in the cluster:&lt;/h3&gt;
 
 &lt;p&gt;For each container on each host you&amp;rsquo;ll want to execute this to get them aware of the other peers.  If running out on AWS these steps could be orchestrated through the init system on the hosts so you don&amp;rsquo;t have to log into each machine.&lt;/p&gt;
-gluster peer probe 1.1.1.1
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;gluster peer probe 1.1.1.1
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;h3 id=&#34;now-create-your-volume-and-start-it&#34;&gt;Now create your volume and start it:&lt;/h3&gt;
-gluster volume create media replica 3 transport tcp 172.30.0.185:/gluster/data  172.30.0.186:/gluster/data 172.30.0.30:/
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;gluster volume create media replica &lt;span style=&#34;color: #ae81ff&#34;&gt;3&lt;/span&gt; transport tcp 172.30.0.185:/gluster/data  172.30.0.186:/gluster/data 172.30.0.30:/
 gluster volume start media
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;In this example I&amp;rsquo;m replicating across each of three servers but depending on your needs you could: distributed striped, distributed, replicated, distributed striped replicated, &amp;hellip; know what and why.&lt;/p&gt;
 
@@ -55,10 +60,12 @@ gluster volume start media
 &lt;p&gt;The docs made a big deal out of mounting the volume.  I suspect if you were doing anything other than replicating that would become very important.&lt;/p&gt;
 
 &lt;p&gt;You&amp;rsquo;ll want to do this on each host, using its internal ip:&lt;/p&gt;
-mount -t glusterfs 172.30.0.186:/media /gluster/mnt
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;mount -t glusterfs 172.30.0.186:/media /gluster/mnt
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;From one of the hosts testing with a write statement to the volume:&lt;/p&gt;
-echo &#34;testing, 1,2,3...&#34; &gt;&gt; /gluster/mnt/test.txt
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;testing, 1,2,3...&amp;quot;&lt;/span&gt; &amp;gt;&amp;gt; /gluster/mnt/test.txt
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;And from another host you should be able to read/write to the same document.  One could then launch containers on any host with a mount to /gluster/mnt to store data.  Then it would have access to the data no matter which node it was launched on.&lt;/p&gt;
 </description>
@@ -75,17 +82,18 @@ echo &#34;testing, 1,2,3...&#34; &gt;&gt; /gluster/mnt/test.txt
 &lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; I map /opt/bin from the host to a folder in the container.  I store custom binaries and scripts in /opt/bin on CoreOS as it is in the path and persists even after CoreOS updates to the latest version.  I&amp;rsquo;ve also changed the example from a Fedora container to CentOS as CentOS already has items installed that the example I link to installed in addition to the dev tools and libraries.&lt;/p&gt;
 
 &lt;p&gt;This is how I got around that problem:&lt;/p&gt;
-docker run -t -i -v /opt/bin:/host_tmp centos /bin/bash
-yum groupinstall -y &#34;Development Tools&#34; &#34;Development Libraries&#34;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;docker run -t -i -v /opt/bin:/host_tmp centos /bin/bash
+yum groupinstall -y &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Development Tools&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Development Libraries&amp;quot;&lt;/span&gt;
 
-curl https://download.samba.org/pub/linux-cifs/cifs-utils/cifs-utils-6.3.tar.bz2 | bunzip2 -c - | tar -xvf -
-cd cifs-utils-6.3/
-./configure &amp;&amp; make
+curl https://download.samba.org/pub/linux-cifs/cifs-utils/cifs-utils-6.3.tar.bz2 &lt;span style=&#34;color: #f8f8f2&#34;&gt;|&lt;/span&gt; bunzip2 -c - &lt;span style=&#34;color: #f8f8f2&#34;&gt;|&lt;/span&gt; tar -xvf -
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;cd&lt;/span&gt; cifs-utils-6.3/
+./configure &lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; make
 cp mount.cifs /host_tmp/
-exit
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;exit&lt;/span&gt;
 
 sudo mkdir /media/foo
-sudo mount.cifs &#34;//1.1.1.1/ntfs_share&#34; -o username=winuser,domain=mydomain.com,rw,dir_mode=0775,noperm /media/foo/ 
+sudo mount.cifs &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;//1.1.1.1/ntfs_share&amp;quot;&lt;/span&gt; -o &lt;span style=&#34;color: #f8f8f2&#34;&gt;username&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;winuser,domain&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;mydomain.com,rw,dir_mode&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;0775,noperm /media/foo/ 
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Originally &lt;a href=&#34;https://gist.github.com/pantelis/540a19262cacc841fb0a&#34;&gt;found here&lt;/a&gt;.&lt;/p&gt;
 </description>
@@ -106,7 +114,8 @@ sudo mount.cifs &#34;//1.1.1.1/ntfs_share&#34; -o username=winuser,domain=mydoma
 &lt;/ul&gt;
 
 &lt;p&gt;The pipe, bash, awk solution:&lt;/p&gt;
-echo &#39; pwd&#39; &gt; cmd.txt &amp;&amp; docker events | awk &#39;/container restart/{system(&#34;echo docker exec &#34; $4 &#34; $(cat cmd.txt) | bash -&#34;)}&#39;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #f8f8f2&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39; pwd&amp;#39;&lt;/span&gt; &amp;gt; cmd.txt &lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; docker events &lt;span style=&#34;color: #f8f8f2&#34;&gt;|&lt;/span&gt; awk &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;#39;/container restart/{system(&amp;quot;echo docker exec &amp;quot; $4 &amp;quot; $(cat cmd.txt) | bash -&amp;quot;)}&amp;#39;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;This pipes the pwd command into a file and then pipes the stream from docker events into awk which is searching for the restart event.  When the restart event is encountered it executes the arbitrary command from the text file against the restarted container.  The command in the text file could be replaced with any desired command.&lt;/p&gt;
 

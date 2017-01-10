@@ -49,7 +49,7 @@
 
 <meta http-equiv="cleartype" content="on">
 
-<meta name="generator" content="Hugo 0.18.1" />
+<meta name="generator" content="Hugo 0.17" />
 
 <script src="/js/vendor/modernizr-2.6.2.custom.min.js"></script>
 
@@ -125,7 +125,8 @@
       </div>
     </header>
     <div class="entry-content">
-      ssh -NL 3389:internal.network.ip.address:3389 user@public.ip.address
+      <div class="highlight" style="background: #272822"><pre style="line-height: 125%"><span></span>ssh -NL 3389:internal.network.ip.address:3389 user@public.ip.address
+</pre></div>
 
 <p>In this example I&rsquo;m forwarding an RDP connection to a machine on some internal network IP address through a public facing SSH server.  I&rsquo;ve found this sort of tunelling through SSH to be invaluable and I&rsquo;ve used it for everything from accessing Windows servers over RDP where the only external access was a key protected SSH server to forwarding http/https traffic to remote APIs for testing and debugging.</p>
 

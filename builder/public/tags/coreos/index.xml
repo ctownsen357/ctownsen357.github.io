@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Coreos on ctownsen357@github.io</title>
+    <title>ctownsen357@github.io</title>
     <link>http://ctownsen357.github.io/tags/coreos/index.xml</link>
-    <description>Recent content in Coreos on ctownsen357@github.io</description>
+    <description>Recent content on ctownsen357@github.io</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
     <atom:link href="http://ctownsen357.github.io/tags/coreos/index.xml" rel="self" type="application/rss+xml" />
@@ -15,7 +15,8 @@
       
       <guid>http://ctownsen357.github.io/posts/manual-coreos-update/</guid>
       <description>&lt;p&gt;This forces a manual update if one is available:&lt;/p&gt;
-update_engine_client -update
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;update_engine_client -update
+&lt;/pre&gt;&lt;/div&gt;
 </description>
     </item>
     
@@ -30,17 +31,18 @@ update_engine_client -update
 &lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; I map /opt/bin from the host to a folder in the container.  I store custom binaries and scripts in /opt/bin on CoreOS as it is in the path and persists even after CoreOS updates to the latest version.  I&amp;rsquo;ve also changed the example from a Fedora container to CentOS as CentOS already has items installed that the example I link to installed in addition to the dev tools and libraries.&lt;/p&gt;
 
 &lt;p&gt;This is how I got around that problem:&lt;/p&gt;
-docker run -t -i -v /opt/bin:/host_tmp centos /bin/bash
-yum groupinstall -y &#34;Development Tools&#34; &#34;Development Libraries&#34;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #272822&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;docker run -t -i -v /opt/bin:/host_tmp centos /bin/bash
+yum groupinstall -y &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Development Tools&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;Development Libraries&amp;quot;&lt;/span&gt;
 
-curl https://download.samba.org/pub/linux-cifs/cifs-utils/cifs-utils-6.3.tar.bz2 | bunzip2 -c - | tar -xvf -
-cd cifs-utils-6.3/
-./configure &amp;&amp; make
+curl https://download.samba.org/pub/linux-cifs/cifs-utils/cifs-utils-6.3.tar.bz2 &lt;span style=&#34;color: #f8f8f2&#34;&gt;|&lt;/span&gt; bunzip2 -c - &lt;span style=&#34;color: #f8f8f2&#34;&gt;|&lt;/span&gt; tar -xvf -
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;cd&lt;/span&gt; cifs-utils-6.3/
+./configure &lt;span style=&#34;color: #f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; make
 cp mount.cifs /host_tmp/
-exit
+&lt;span style=&#34;color: #f8f8f2&#34;&gt;exit&lt;/span&gt;
 
 sudo mkdir /media/foo
-sudo mount.cifs &#34;//1.1.1.1/ntfs_share&#34; -o username=winuser,domain=mydomain.com,rw,dir_mode=0775,noperm /media/foo/ 
+sudo mount.cifs &lt;span style=&#34;color: #e6db74&#34;&gt;&amp;quot;//1.1.1.1/ntfs_share&amp;quot;&lt;/span&gt; -o &lt;span style=&#34;color: #f8f8f2&#34;&gt;username&lt;/span&gt;&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;winuser,domain&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;mydomain.com,rw,dir_mode&lt;span style=&#34;color: #f92672&#34;&gt;=&lt;/span&gt;0775,noperm /media/foo/ 
+&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Originally &lt;a href=&#34;https://gist.github.com/pantelis/540a19262cacc841fb0a&#34;&gt;found here&lt;/a&gt;.&lt;/p&gt;
 </description>
